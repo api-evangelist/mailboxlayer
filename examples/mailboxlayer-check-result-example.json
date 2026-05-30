@@ -1,0 +1,14 @@
+{
+  "email": "marketing@example.com",
+  "did_you_mean": "",
+  "user": "marketing",
+  "domain": "example.com",
+  "format_valid": true,
+  "mx_found": true,
+  "smtp_check": true,
+  "catch_all": false,
+  "role": true,
+  "disposable": false,
+  "free": false,
+  "score": 0.85
+}

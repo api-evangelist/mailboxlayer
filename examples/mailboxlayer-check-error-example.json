@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://apilayer.net/api/check?access_key=YOUR_ACCESS_KEY&email=not-an-email"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "success": false,
+      "error": {
+        "code": 211,
+        "type": "invalid_email_address",
+        "info": "The email address supplied for the email parameter is invalid."
+      }
+    }
+  }
+}

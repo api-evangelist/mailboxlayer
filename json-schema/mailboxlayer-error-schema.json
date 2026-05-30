@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/api-evangelist/mailboxlayer/blob/main/json-schema/mailboxlayer-error-schema.json",
+  "title": "mailboxlayer Error Response",
+  "description": "Error envelope returned by mailboxlayer when a request fails. HTTP status is always 200; check the success flag and the error.code value.",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "const": false,
+      "description": "Always false for error responses."
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "enum": [101, 103, 104, 105, 106, 210, 211],
+          "description": "Numeric mailboxlayer error code."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "invalid_access_key",
+            "invalid_api_function",
+            "usage_limit_reached",
+            "https_access_restricted",
+            "inactive_user",
+            "no_email_address_supplied",
+            "invalid_email_address"
+          ],
+          "description": "Machine-readable error identifier."
+        },
+        "info": {
+          "type": "string",
+          "description": "Human-readable error description."
+        }
+      },
+      "required": ["code", "type", "info"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["success", "error"],
+  "additionalProperties": false
+}

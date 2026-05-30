@@ -1,0 +1,95 @@
+finops: "0.1"
+focusVersion: "1.0"
+provider:
+  id: mailboxlayer
+  name: mailboxlayer
+  url: https://mailboxlayer.com
+  parent: apilayer
+modified: '2026-05-30'
+
+billingSurface:
+  type: subscription
+  currency: USD
+  cycle: monthly
+  invoiceCadence: monthly
+  paymentMethods:
+    - credit-card
+  procurement:
+    selfService: true
+    contractRequired: false
+    notes: Self-service signup via mailboxlayer.com/product. Custom/Enterprise tiers require sales engagement.
+
+# FOCUS-aligned charge model
+charges:
+  - chargeCategory: Usage
+    chargeSubcategory: Subscription
+    description: Monthly subscription fee for selected plan.
+    plans:
+      - free: 0.00
+      - basic: 14.99
+      - professional-plus: 74.99
+      - enterprise-plus: 249.99
+  - chargeCategory: Usage
+    chargeSubcategory: Overage
+    description: Per-request overage charges incurred after the monthly request allowance is exhausted.
+    pricing:
+      - plan: basic
+        unit: request
+        rate: 0.012
+      - plan: professional-plus
+        unit: request
+        rate: 0.006
+      - plan: enterprise-plus
+        unit: request
+        rate: 0.004
+  - chargeCategory: Discount
+    chargeSubcategory: AnnualDiscount
+    description: Discount applied when paying annually.
+    pricing:
+      - plan: basic
+        discountPct: 10
+      - plan: professional-plus
+        discountPct: 12.5
+      - plan: enterprise-plus
+        discountPct: 15
+
+meteringDimensions:
+  - id: api-requests
+    description: Each call to GET /api/check counts as one billable API request.
+    unit: request
+    aggregation: monthly
+    resetCadence: monthly
+    cap: plan-specific
+    overageAllowed: true
+  - id: bulk-requests
+    description: One request to the bulk endpoint counts as a single API request, regardless of how many emails it includes (max 25 on Pro Plus, 100 on Enterprise Plus).
+    unit: request
+
+costAllocation:
+  description: >-
+    Costs are attributed by API access key. Customers operating multiple environments
+    or product surfaces typically issue one key per environment to allocate the bill
+    across cost centres.
+  recommendedTags:
+    - environment
+    - product
+    - team
+
+forecasting:
+  description: >-
+    Forecast monthly spend from (subscription-fee) + (forecast-monthly-requests - plan-allowance) * overage-rate.
+    The Free tier is hard-capped (no overage), so spend never exceeds $0.
+  inputs:
+    - monthlyRequests
+    - planAllowance
+    - overageRate
+
+reporting:
+  invoices: Available via the apilayer billing portal.
+  usageDashboard: apilayer customer dashboard exposes monthly request volume per key.
+  exports: ~
+
+contact:
+  billing: billing@apilayer.com
+  support: support@apilayer.com
+  portal: https://mailboxlayer.com/dashboard

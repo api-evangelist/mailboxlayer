@@ -1,32 +1,200 @@
 aid: mailboxlayer
 name: mailboxlayer
-description: "Email address validation"
-url: https://mailboxlayer.com?utm_source=Github&utm_medium=Referral&utm_campaign=Public-apis-repo-Best-sellers
+description: >-
+  mailboxlayer is an apilayer-owned REST JSON API for email address verification.
+  It performs syntax and typo checks, MX-record lookup, real-time SMTP verification,
+  catch-all detection, role-address detection, free and disposable provider
+  detection, and returns a numeric deliverability quality score. Useful for
+  signup-form validation, list hygiene, lead enrichment, and fraud prevention.
+url: https://mailboxlayer.com
+image: https://mailboxlayer.com/site_images/mailboxlayer_logo_white.svg
 specificationVersion: '0.20'
 created: '2026-05-28'
-modified: '2026-05-28'
+modified: '2026-05-30'
 x-source: public-apis/public-apis
-x-category: "Email"
+x-category: Email
 x-tier: 3
 x-tier-reason: bulk-registered-from-public-apis
+x-type: company
 tags:
   - Email
+  - Email Verification
+  - Email Validation
+  - SMTP
+  - MX Records
+  - Catch-All Detection
+  - Disposable Email
+  - Free Email Provider
+  - Role Address
+  - Quality Score
+  - apilayer
   - Public APIs
 apis:
-  - name: mailboxlayer
-    description: "Email address validation"
-    humanURL: https://mailboxlayer.com?utm_source=Github&utm_medium=Referral&utm_campaign=Public-apis-repo-Best-sellers
-    baseURL: https://mailboxlayer.com?utm_source=Github&utm_medium=Referral&utm_campaign=Public-apis-repo-Best-sellers
+  - name: mailboxlayer Verification API
+    description: >-
+      REST JSON API for verifying a single email address. Performs syntax
+      validation, MX-record lookup, real-time SMTP check, catch-all detection,
+      role-address detection, free / disposable provider detection, did-you-mean
+      suggestion, and a 0.0 - 1.0 deliverability quality score.
+    humanURL: https://mailboxlayer.com
+    baseURL: https://apilayer.net/api
     tags:
-      - Email
+      - Email Verification
+      - SMTP
+      - MX Records
+      - Quality Score
     properties:
       - type: Documentation
-        url: https://mailboxlayer.com?utm_source=Github&utm_medium=Referral&utm_campaign=Public-apis-repo-Best-sellers
+        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+      - type: APIReference
+        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+      - type: Quickstart
+        url: https://mailboxlayer.com/quickstart
+      - type: Authentication
+        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+      - type: OpenAPI
+        url: openapi/mailboxlayer-openapi.yml
+      - type: JSONSchema
+        url: json-schema/mailboxlayer-check-result-schema.json
+      - type: JSONSchema
+        url: json-schema/mailboxlayer-error-schema.json
+      - type: JSONStructure
+        url: json-structure/mailboxlayer-check-result-structure.json
+      - type: JSON-LD
+        url: json-ld/mailboxlayer-context.jsonld
+      - type: Example
+        url: examples/mailboxlayer-check-success-example.json
+      - type: Example
+        url: examples/mailboxlayer-check-typo-example.json
+      - type: Example
+        url: examples/mailboxlayer-check-disposable-example.json
+      - type: Example
+        url: examples/mailboxlayer-check-error-example.json
+      - type: Example
+        url: examples/mailboxlayer-check-result-example.json
+      - type: Example
+        url: examples/mailboxlayer-check-result-free-example.json
+      - type: NaftikoCapability
+        url: capabilities/mailboxlayer-verification.yaml
+      - type: RateLimits
+        url: rate-limits/mailboxlayer-rate-limits.yml
 common:
   - type: Website
-    url: https://mailboxlayer.com?utm_source=Github&utm_medium=Referral&utm_campaign=Public-apis-repo-Best-sellers
+    url: https://mailboxlayer.com
+  - type: Portal
+    url: https://mailboxlayer.com/dashboard
+  - type: SignUp
+    url: https://mailboxlayer.com/product
+  - type: Pricing
+    url: https://mailboxlayer.com/product
+  - type: GettingStarted
+    url: https://mailboxlayer.com/quickstart
+  - type: TermsOfService
+    url: https://mailboxlayer.com/terms
+  - type: PrivacyPolicy
+    url: https://mailboxlayer.com/privacy
+  - type: Support
+    url: https://mailboxlayer.com/support
+  - type: GitHubOrganization
+    url: https://github.com/apilayer
+  - type: GitHubRepository
+    url: https://github.com/apilayer/mailboxlayer-API
+  - type: SDK
+    name: Laravel mailboxlayer
+    url: https://github.com/ash-jc-allen/laravel-mailboxlayer
+  - type: SDK
+    name: actfong/mailboxlayer (Ruby)
+    url: https://github.com/actfong/mailboxlayer
+  - type: SDK
+    name: damienmarchandfr/mailboxlayer-node-client (Node/TypeScript)
+    url: https://github.com/damienmarchandfr/mailboxlayer-node-client
+  - type: SDK
+    name: mailboxlayerbundle (Symfony)
+    url: https://github.com/ylly/mailboxlayerbundle
+  - type: Integrations
+    name: PostHog
+    url: https://github.com/PostHog/mailboxlayer-plugin
+  - type: Integrations
+    name: Fortinet FortiSOAR
+    url: https://github.com/fortinet-fortisoar/connector-mailboxlayer
+  - type: SpectralRules
+    url: rules/mailboxlayer-rules.yml
+  - type: Vocabulary
+    url: vocabulary/mailboxlayer-vocabulary.yml
   - type: PublicAPIsListing
     url: https://github.com/public-apis/public-apis
+  - type: Plans
+    url: plans/mailboxlayer-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/mailboxlayer-rate-limits.yml
+  - type: FinOps
+    url: finops/mailboxlayer-finops.yml
+  - type: Features
+    data:
+      - name: Syntax And Typo Check
+        description: Thorough RFC 5322 syntax validation with did-you-mean suggestions for likely typos.
+      - name: Real-Time SMTP Verification
+        description: Each address is pinged via SMTP to confirm the mailbox actually accepts mail.
+      - name: MX Record Lookup
+        description: Verifies that the email domain has functioning MX records.
+      - name: Catch-All Detection
+        description: Determines whether the recipient domain accepts mail for any local part (paid plans only).
+      - name: Role Address Detection
+        description: Flags addresses associated with a function rather than a person (support@, admin@, etc.).
+      - name: Free Provider Detection
+        description: Identifies addresses on free webmail providers (Gmail, Yahoo, Outlook.com, etc.).
+      - name: Disposable Provider Detection
+        description: Identifies addresses on throwaway / disposable providers (mailinator.com, etc.).
+      - name: Quality Score
+        description: A 0.0 to 1.0 numeric score expressing overall deliverability and quality.
+      - name: HTTPS Encryption
+        description: 256-bit HTTPS transport on paid plans (Basic and above).
+      - name: Bulk Endpoint
+        description: Submit 25 addresses (Pro Plus) or 100 addresses (Enterprise Plus) in a single request.
+      - name: JSONP Support
+        description: JSONP wrapper via the `callback` query parameter.
+  - type: UseCases
+    data:
+      - name: Signup Form Validation
+        description: Catch typos and disposable addresses at signup before they hit your user database.
+      - name: List Hygiene
+        description: Clean existing email marketing lists to lift deliverability and sender reputation.
+      - name: Lead Enrichment
+        description: Enrich CRM and lead-capture records with deliverability scores and role flags.
+      - name: Fraud And Abuse Prevention
+        description: Block disposable email providers commonly used for trial abuse and chargebacks.
+      - name: Transactional Email Hygiene
+        description: Reduce hard-bounces from order receipts, password resets, and notifications.
+      - name: B2B Sales Qualification
+        description: Separate role addresses and free-provider addresses from individual corporate inboxes.
+  - type: Integrations
+    data:
+      - name: PostHog
+        description: Plugin scoring incoming PostHog user emails via the mailboxlayer API.
+      - name: Fortinet FortiSOAR
+        description: Connector for incorporating email verification into security orchestration playbooks.
+      - name: Laravel
+        description: Multiple community Laravel packages wrap mailboxlayer for PHP web applications.
+      - name: Symfony
+        description: Symfony bundle for mailboxlayer-backed email validation.
+      - name: Node.js / TypeScript
+        description: Node and TypeScript client libraries for serverside email verification.
+      - name: Ruby
+        description: Ruby client gem.
+      - name: Delphi
+        description: Delphi sample demonstrating the API for desktop application validation.
+  - type: Solutions
+    data:
+      - name: Free
+        description: 100 requests/month, HTTP only, no support, no catch-all detection.
+      - name: Basic
+        description: $14.99/mo for 5,000 requests; HTTPS, catch-all detection, standard support.
+      - name: Professional Plus
+        description: $74.99/mo for 50,000 requests; adds bulk endpoint (25 emails).
+      - name: Enterprise Plus
+        description: $249.99/mo for 250,000 requests; adds bulk endpoint (100 emails) and richer SLAs.
+      - name: Custom
+        description: Contact sales for higher volumes and bespoke arrangements.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

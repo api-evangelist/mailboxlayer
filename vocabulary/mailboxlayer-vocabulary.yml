@@ -1,0 +1,101 @@
+name: mailboxlayer Vocabulary
+description: Controlled vocabulary covering the operational and capability dimensions of the mailboxlayer email verification API.
+url: https://github.com/api-evangelist/mailboxlayer/blob/main/vocabulary/mailboxlayer-vocabulary.yml
+created: '2026-05-30'
+modified: '2026-05-30'
+
+provider:
+  name: mailboxlayer
+  parent: apilayer
+  domain: Email Verification
+
+operational:
+  - term: API Access Key
+    definition: A secret string passed as the `access_key` query parameter that identifies and authorizes the calling account.
+    synonyms: [access key, api key, secret key]
+  - term: HTTPS Access
+    definition: Encrypted transport for the mailboxlayer API. Restricted to paid plans (Basic and above).
+    synonyms: [secure transport, TLS, SSL]
+  - term: Rate Limit
+    definition: The maximum number of API requests allowed per subscription period (month).
+    synonyms: [request quota, monthly limit]
+  - term: Overage Rate
+    definition: Per-request price charged when a plan's monthly request allowance is exceeded.
+    synonyms: [overage cost, additional request fee]
+  - term: Bulk Endpoint
+    definition: Endpoint that accepts a list of email addresses (25 on Pro, 100 on Enterprise) in one call.
+    synonyms: [batch endpoint]
+
+capability:
+  - term: Syntax Check
+    definition: Validates that an email address is well-formed per RFC 5322.
+    synonyms: [format check, format_valid]
+  - term: Typo Check
+    definition: Detects common misspellings of popular domains and returns a did_you_mean suggestion.
+    synonyms: [did-you-mean, typo correction]
+  - term: MX Lookup
+    definition: Confirms that the email address's domain has valid MX records.
+    synonyms: [mx_found, MX record check]
+  - term: SMTP Check
+    definition: Connects to the recipient's SMTP server and verifies that the mailbox accepts mail.
+    synonyms: [smtp_check, real-time SMTP verification, mailbox ping]
+  - term: Catch-All Detection
+    definition: Determines whether the domain accepts mail for any local part.
+    synonyms: [catch_all, accept-all domain]
+  - term: Role Address Detection
+    definition: Flags addresses associated with a function rather than a person (e.g. support@, sales@).
+    synonyms: [role, role-based address]
+  - term: Free Provider Detection
+    definition: Flags addresses on free email providers such as Gmail, Yahoo, Outlook.com.
+    synonyms: [free, free email provider]
+  - term: Disposable Provider Detection
+    definition: Flags addresses on disposable / throwaway providers such as mailinator.com.
+    synonyms: [disposable, throwaway email]
+  - term: Quality Score
+    definition: A 0.0 - 1.0 numeric score expressing overall deliverability and quality of the address.
+    synonyms: [score, deliverability score]
+
+data:
+  - term: Email Address
+    definition: The address being verified, in `user@domain` form.
+  - term: Local Part
+    definition: The portion of the email address before the `@` (returned as `user`).
+  - term: Domain
+    definition: The portion of the email address after the `@`.
+  - term: Quality Score Range
+    definition: A floating-point value between 0.0 (poor) and 1.0 (excellent).
+
+error:
+  - code: 101
+    type: invalid_access_key
+    definition: The supplied API access key is invalid.
+  - code: 103
+    type: invalid_api_function
+    definition: The requested API endpoint does not exist.
+  - code: 104
+    type: usage_limit_reached
+    definition: The account's monthly request volume has been exceeded.
+  - code: 105
+    type: https_access_restricted
+    definition: HTTPS is not enabled on the current subscription plan.
+  - code: 106
+    type: inactive_user
+    definition: The account is inactive or suspended.
+  - code: 210
+    type: no_email_address_supplied
+    definition: The `email` query parameter is missing.
+  - code: 211
+    type: invalid_email_address
+    definition: The `email` query parameter is syntactically invalid.
+
+commercial:
+  - term: Free Plan
+    definition: 100 verification requests per month; HTTP only; no support.
+  - term: Basic Plan
+    definition: $14.99/mo for 5,000 requests; HTTPS, catch-all detection, standard support.
+  - term: Professional Plus Plan
+    definition: $74.99/mo for 50,000 requests; adds bulk endpoint (25 emails).
+  - term: Enterprise Plus Plan
+    definition: $249.99/mo for 250,000 requests; adds bulk endpoint (100 emails).
+  - term: Platinum Support
+    definition: Optional annual add-on with dedicated account management and priority support.

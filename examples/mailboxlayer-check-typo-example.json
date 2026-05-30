@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://apilayer.net/api/check?access_key=YOUR_ACCESS_KEY&email=jane.doe@gnail.com"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "email": "jane.doe@gnail.com",
+      "did_you_mean": "jane.doe@gmail.com",
+      "user": "jane.doe",
+      "domain": "gnail.com",
+      "format_valid": true,
+      "mx_found": false,
+      "smtp_check": false,
+      "catch_all": null,
+      "role": false,
+      "disposable": false,
+      "free": false,
+      "score": 0.32
+    }
+  }
+}

@@ -1,0 +1,231 @@
+openapi: 3.0.3
+info:
+  title: mailboxlayer API
+  description: |
+    The mailboxlayer API is a simple REST-based JSON API for thorough email address
+    validation and verification. In addition to syntax checks, it performs real-time
+    SMTP verification, MX-record lookup, catch-all detection, role-address detection,
+    free-provider detection, disposable-provider detection, did-you-mean typo
+    suggestions, and a numeric deliverability quality score.
+
+    Authentication is via an API access key passed as the `access_key` query
+    parameter. HTTPS is available on paid plans (Basic and above).
+  version: '1.0.0'
+  contact:
+    name: mailboxlayer Customer Support
+    email: support@apilayer.com
+    url: https://mailboxlayer.com/support
+  termsOfService: https://mailboxlayer.com/terms
+  license:
+    name: mailboxlayer Terms and Conditions
+    url: https://mailboxlayer.com/terms
+servers:
+  - url: https://apilayer.net/api
+    description: HTTP endpoint (available on Free plan)
+  - url: https://apilayer.net/api
+    description: HTTPS endpoint (available on Basic plan and above)
+security:
+  - AccessKeyAuth: []
+tags:
+  - name: Verification
+    description: Email address validation and verification operations.
+paths:
+  /check:
+    get:
+      tags:
+        - Verification
+      summary: Verify Email Address
+      description: |
+        Verifies a single email address. Performs syntax validation, MX-record
+        lookup, SMTP verification (optional), catch-all detection, role-address
+        detection, free-provider detection, disposable-provider detection,
+        did-you-mean suggestion, and returns a deliverability quality score.
+      operationId: checkEmail
+      parameters:
+        - name: access_key
+          in: query
+          required: true
+          description: Your mailboxlayer API access key.
+          schema:
+            type: string
+            example: YOUR_ACCESS_KEY
+        - name: email
+          in: query
+          required: true
+          description: The email address to verify.
+          schema:
+            type: string
+            format: email
+            example: support@apilayer.net
+        - name: smtp
+          in: query
+          required: false
+          description: Set to `0` to skip the real-time SMTP check (default `1`).
+          schema:
+            type: integer
+            enum: [0, 1]
+            default: 1
+        - name: format
+          in: query
+          required: false
+          description: Set to `1` to pretty-print the JSON response (default `0`).
+          schema:
+            type: integer
+            enum: [0, 1]
+            default: 0
+        - name: callback
+          in: query
+          required: false
+          description: JSONP callback function name. Wraps the JSON response in a function call.
+          schema:
+            type: string
+            example: myJsonpCallback
+      responses:
+        '200':
+          description: Successful verification result. Note the API always returns 200 on a well-formed request; check the `success` field and `error.code` for failures.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/CheckResult'
+                  - $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                success:
+                  summary: Successful verification
+                  value:
+                    email: support@apilayer.net
+                    did_you_mean: ''
+                    user: support
+                    domain: apilayer.net
+                    format_valid: true
+                    mx_found: true
+                    smtp_check: true
+                    catch_all: false
+                    role: true
+                    disposable: false
+                    free: false
+                    score: 0.8
+                typo:
+                  summary: Did-you-mean suggestion
+                  value:
+                    email: support@apilayer.nt
+                    did_you_mean: support@apilayer.net
+                    user: support
+                    domain: apilayer.nt
+                    format_valid: true
+                    mx_found: false
+                    smtp_check: false
+                    catch_all: null
+                    role: true
+                    disposable: false
+                    free: false
+                    score: 0.32
+                invalid_email:
+                  summary: Invalid email address error
+                  value:
+                    success: false
+                    error:
+                      code: 211
+                      type: invalid_email_address
+                      info: The email address supplied for the email parameter is invalid.
+components:
+  securitySchemes:
+    AccessKeyAuth:
+      type: apiKey
+      in: query
+      name: access_key
+      description: API access key provided when you sign up for a mailboxlayer plan.
+  schemas:
+    CheckResult:
+      type: object
+      description: Successful email verification result.
+      properties:
+        email:
+          type: string
+          format: email
+          description: The email address submitted for verification.
+        did_you_mean:
+          type: string
+          description: Suggested email address if a typo was detected, otherwise an empty string.
+        user:
+          type: string
+          description: The local part (user) of the submitted email address.
+        domain:
+          type: string
+          description: The domain part of the submitted email address.
+        format_valid:
+          type: boolean
+          description: Whether the email address has a valid syntax.
+        mx_found:
+          type: boolean
+          description: Whether MX records exist for the domain.
+        smtp_check:
+          type: boolean
+          description: Whether the SMTP check succeeded (mailbox exists / SMTP server accepts the address).
+        catch_all:
+          type: boolean
+          nullable: true
+          description: Whether the domain is configured as catch-all. Available on paid plans.
+        role:
+          type: boolean
+          description: Whether the address is a role-based address (e.g., `support@`, `admin@`).
+        disposable:
+          type: boolean
+          description: Whether the domain belongs to a disposable email provider (e.g., `mailinator.com`).
+        free:
+          type: boolean
+          description: Whether the domain belongs to a free email provider (e.g., `gmail.com`, `yahoo.com`).
+        score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Numeric quality score reflecting overall deliverability and quality (0.0 - 1.0).
+      required:
+        - email
+        - user
+        - domain
+        - format_valid
+        - mx_found
+        - smtp_check
+        - role
+        - disposable
+        - free
+        - score
+    ErrorResponse:
+      type: object
+      description: Error response wrapper returned on a failed request.
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          $ref: '#/components/schemas/ApiError'
+      required:
+        - success
+        - error
+    ApiError:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Numeric error code.
+          enum: [101, 103, 104, 105, 106, 210, 211]
+        type:
+          type: string
+          description: Machine-readable error identifier.
+          enum:
+            - invalid_access_key
+            - invalid_api_function
+            - usage_limit_reached
+            - https_access_restricted
+            - inactive_user
+            - no_email_address_supplied
+            - invalid_email_address
+        info:
+          type: string
+          description: Human-readable error description.
+      required:
+        - code
+        - type
+        - info

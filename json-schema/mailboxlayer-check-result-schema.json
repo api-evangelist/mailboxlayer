@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/api-evangelist/mailboxlayer/blob/main/json-schema/mailboxlayer-check-result-schema.json",
+  "title": "mailboxlayer Email Check Result",
+  "description": "Successful response payload returned by GET /api/check after verifying a single email address.",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "The email address submitted for verification."
+    },
+    "did_you_mean": {
+      "type": "string",
+      "description": "Suggested email address if a likely typo was detected, otherwise an empty string."
+    },
+    "user": {
+      "type": "string",
+      "description": "The local part (user) of the submitted email address."
+    },
+    "domain": {
+      "type": "string",
+      "description": "The domain part of the submitted email address."
+    },
+    "format_valid": {
+      "type": "boolean",
+      "description": "Whether the email address has valid syntax."
+    },
+    "mx_found": {
+      "type": "boolean",
+      "description": "Whether MX records exist for the domain."
+    },
+    "smtp_check": {
+      "type": "boolean",
+      "description": "Whether the real-time SMTP verification succeeded."
+    },
+    "catch_all": {
+      "type": ["boolean", "null"],
+      "description": "Whether the domain is configured as catch-all. Available on paid plans; may be null on Free."
+    },
+    "role": {
+      "type": "boolean",
+      "description": "Whether the address is a role-based address (e.g., support@, admin@)."
+    },
+    "disposable": {
+      "type": "boolean",
+      "description": "Whether the domain belongs to a disposable email provider (e.g., mailinator.com)."
+    },
+    "free": {
+      "type": "boolean",
+      "description": "Whether the domain belongs to a free email provider (e.g., gmail.com, yahoo.com)."
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Numeric deliverability quality score from 0.0 to 1.0."
+    }
+  },
+  "required": [
+    "email",
+    "user",
+    "domain",
+    "format_valid",
+    "mx_found",
+    "smtp_check",
+    "role",
+    "disposable",
+    "free",
+    "score"
+  ],
+  "additionalProperties": false
+}

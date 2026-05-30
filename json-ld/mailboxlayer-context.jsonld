@@ -1,0 +1,80 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "mbl": "https://mailboxlayer.com/vocab#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "CheckResult": "mbl:EmailVerificationResult",
+    "ErrorResponse": "mbl:ErrorResponse",
+
+    "email": {
+      "@id": "schema:email",
+      "@type": "xsd:string"
+    },
+    "did_you_mean": {
+      "@id": "mbl:didYouMean",
+      "@type": "xsd:string"
+    },
+    "user": {
+      "@id": "mbl:localPart",
+      "@type": "xsd:string"
+    },
+    "domain": {
+      "@id": "schema:domainName",
+      "@type": "xsd:string"
+    },
+    "format_valid": {
+      "@id": "mbl:formatValid",
+      "@type": "xsd:boolean"
+    },
+    "mx_found": {
+      "@id": "mbl:mxFound",
+      "@type": "xsd:boolean"
+    },
+    "smtp_check": {
+      "@id": "mbl:smtpCheck",
+      "@type": "xsd:boolean"
+    },
+    "catch_all": {
+      "@id": "mbl:catchAll",
+      "@type": "xsd:boolean"
+    },
+    "role": {
+      "@id": "mbl:roleAddress",
+      "@type": "xsd:boolean"
+    },
+    "disposable": {
+      "@id": "mbl:disposableProvider",
+      "@type": "xsd:boolean"
+    },
+    "free": {
+      "@id": "mbl:freeProvider",
+      "@type": "xsd:boolean"
+    },
+    "score": {
+      "@id": "mbl:qualityScore",
+      "@type": "xsd:float"
+    },
+
+    "success": {
+      "@id": "mbl:success",
+      "@type": "xsd:boolean"
+    },
+    "error": {
+      "@id": "schema:error"
+    },
+    "code": {
+      "@id": "mbl:errorCode",
+      "@type": "xsd:integer"
+    },
+    "type": {
+      "@id": "mbl:errorType",
+      "@type": "xsd:string"
+    },
+    "info": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    }
+  }
+}

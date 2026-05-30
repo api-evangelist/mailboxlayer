@@ -1,0 +1,149 @@
+apiCommonsPlans: "0.1"
+provider:
+  id: mailboxlayer
+  name: mailboxlayer
+  url: https://mailboxlayer.com
+  parent: apilayer
+modified: '2026-05-30'
+billingModel:
+  type: subscription
+  cycle: monthly
+  currency: USD
+  trial: ~
+  freeTier: true
+  overage:
+    type: per-request
+    notes: Charged after monthly request allowance is exhausted; per-request rate varies by plan.
+
+plans:
+  - id: free
+    name: Free
+    price:
+      monthly: 0
+      annual: 0
+      currency: USD
+    quotas:
+      - metric: requests
+        included: 100
+        period: month
+    features:
+      - syntax-and-typo-check
+      - free-provider-database
+      - disposable-provider-database
+      - quality-score
+      - real-time-smtp-check
+      - mx-records-check
+    transport:
+      https: false
+    support: none
+    notes: Free tier. HTTP only; no support; no catch-all detection; no bulk endpoint.
+
+  - id: basic
+    name: Basic
+    price:
+      monthly: 14.99
+      annual: 161.99
+      annualDiscountPct: 10
+      currency: USD
+    quotas:
+      - metric: requests
+        included: 5000
+        period: month
+    overage:
+      rate: 0.012
+      unit: request
+      currency: USD
+    features:
+      - syntax-and-typo-check
+      - free-provider-database
+      - disposable-provider-database
+      - quality-score
+      - real-time-smtp-check
+      - mx-records-check
+      - catch-all-detection
+    transport:
+      https: true
+    support: standard
+
+  - id: professional-plus
+    name: Professional Plus
+    price:
+      monthly: 74.99
+      annual: 787.99
+      annualDiscountPct: 12.5
+      currency: USD
+    quotas:
+      - metric: requests
+        included: 50000
+        period: month
+    overage:
+      rate: 0.006
+      unit: request
+      currency: USD
+    features:
+      - syntax-and-typo-check
+      - free-provider-database
+      - disposable-provider-database
+      - quality-score
+      - real-time-smtp-check
+      - mx-records-check
+      - catch-all-detection
+      - bulk-endpoint-25-emails
+    transport:
+      https: true
+    support: standard
+
+  - id: enterprise-plus
+    name: Enterprise Plus
+    price:
+      monthly: 249.99
+      annual: 2549.99
+      annualDiscountPct: 15
+      currency: USD
+    quotas:
+      - metric: requests
+        included: 250000
+        period: month
+    overage:
+      rate: 0.004
+      unit: request
+      currency: USD
+    features:
+      - syntax-and-typo-check
+      - free-provider-database
+      - disposable-provider-database
+      - quality-score
+      - real-time-smtp-check
+      - mx-records-check
+      - catch-all-detection
+      - bulk-endpoint-100-emails
+    transport:
+      https: true
+    support: standard
+
+  - id: custom
+    name: Custom / Unlimited
+    price:
+      monthly: ~
+      annual: ~
+      currency: USD
+    quotas:
+      - metric: requests
+        included: ~
+        period: month
+        notes: Volume negotiated based on customer needs.
+    transport:
+      https: true
+    support: standard
+    notes: Contact sales for custom/enterprise pricing above 250,000 requests/month.
+
+addOns:
+  - id: platinum-support
+    name: Platinum Support
+    cycle: annual
+    features:
+      - dedicated-account-management
+      - priority-bug-fixes
+      - priority-email-support
+      - quarterly-briefing-calls
+      - feature-request-prioritization

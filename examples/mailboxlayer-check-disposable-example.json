@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://apilayer.net/api/check?access_key=YOUR_ACCESS_KEY&email=2837484@mailinator.com"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "email": "2837484@mailinator.com",
+      "did_you_mean": "",
+      "user": "2837484",
+      "domain": "mailinator.com",
+      "format_valid": true,
+      "mx_found": true,
+      "smtp_check": true,
+      "catch_all": true,
+      "role": false,
+      "disposable": true,
+      "free": false,
+      "score": 0.48
+    }
+  }
+}

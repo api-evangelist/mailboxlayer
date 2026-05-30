@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://apilayer.net/api/check?access_key=YOUR_ACCESS_KEY&email=support@apilayer.net&smtp=1&format=1"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "email": "support@apilayer.net",
+      "did_you_mean": "",
+      "user": "support",
+      "domain": "apilayer.net",
+      "format_valid": true,
+      "mx_found": true,
+      "smtp_check": true,
+      "catch_all": false,
+      "role": true,
+      "disposable": false,
+      "free": false,
+      "score": 0.8
+    }
+  }
+}

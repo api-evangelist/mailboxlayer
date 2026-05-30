@@ -1,0 +1,95 @@
+apiCommonsRateLimits: "0.1"
+provider:
+  id: mailboxlayer
+  name: mailboxlayer
+  url: https://mailboxlayer.com
+modified: '2026-05-30'
+
+scope:
+  description: >-
+    mailboxlayer enforces request quotas as monthly subscription allowances tied to
+    the API access key. There is no published per-second / per-minute request-rate
+    cap or concurrency limit; throttling is performed by monthly volume.
+
+quotas:
+  - id: free-monthly-quota
+    plan: free
+    metric: requests
+    limit: 100
+    period: month
+    enforcement: hard
+    notes: Free tier is hard-capped at 100 requests per month with no overage.
+
+  - id: basic-monthly-quota
+    plan: basic
+    metric: requests
+    limit: 5000
+    period: month
+    enforcement: soft
+    overage:
+      rate: 0.012
+      unit: request
+      currency: USD
+
+  - id: professional-plus-monthly-quota
+    plan: professional-plus
+    metric: requests
+    limit: 50000
+    period: month
+    enforcement: soft
+    overage:
+      rate: 0.006
+      unit: request
+      currency: USD
+
+  - id: enterprise-plus-monthly-quota
+    plan: enterprise-plus
+    metric: requests
+    limit: 250000
+    period: month
+    enforcement: soft
+    overage:
+      rate: 0.004
+      unit: request
+      currency: USD
+
+  - id: custom-monthly-quota
+    plan: custom
+    metric: requests
+    limit: ~
+    period: month
+    enforcement: soft
+    notes: Volume negotiated; pricing on contact-sales basis.
+
+bulkLimits:
+  - id: professional-plus-bulk
+    plan: professional-plus
+    endpoint: bulk
+    maxEmailsPerRequest: 25
+  - id: enterprise-plus-bulk
+    plan: enterprise-plus
+    endpoint: bulk
+    maxEmailsPerRequest: 100
+
+policies:
+  exceeded-behavior:
+    description: >-
+      When the monthly quota is exhausted, the API responds with HTTP 200 and an
+      error envelope containing `error.code: 104` / `error.type: usage_limit_reached`
+      until the next monthly reset (or until an overage-eligible plan is upgraded).
+  https-restriction:
+    description: >-
+      HTTPS is only available on Basic and above. Free-plan keys attempting to call
+      `https://apilayer.net/api/check` receive error code 105 (https_access_restricted).
+  reset-cadence:
+    description: Quotas reset on the subscription's monthly billing anniversary.
+
+headers:
+  description: >-
+    mailboxlayer does not document standard `X-RateLimit-*` response headers.
+    Quota state is reported in the JSON error envelope when the limit is reached.
+
+contact:
+  type: Support
+  email: support@apilayer.com
+  url: https://mailboxlayer.com/support

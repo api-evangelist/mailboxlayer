@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://github.com/api-evangelist/mailboxlayer/blob/main/json-structure/mailboxlayer-check-result-structure.json",
+  "name": "MailboxlayerCheckResult",
+  "description": "Structured definition of the mailboxlayer GET /api/check successful response.",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Submitted email address"
+    },
+    "did_you_mean": {
+      "type": "string",
+      "description": "Suggested correction or empty string"
+    },
+    "user": {
+      "type": "string",
+      "description": "Local part (user) of the address"
+    },
+    "domain": {
+      "type": "string",
+      "description": "Domain part of the address"
+    },
+    "format_valid": {
+      "type": "boolean",
+      "description": "Syntax validity"
+    },
+    "mx_found": {
+      "type": "boolean",
+      "description": "MX record existence"
+    },
+    "smtp_check": {
+      "type": "boolean",
+      "description": "Real-time SMTP verification result"
+    },
+    "catch_all": {
+      "type": ["boolean", "null"],
+      "description": "Catch-all configuration of the domain"
+    },
+    "role": {
+      "type": "boolean",
+      "description": "Role-based address flag"
+    },
+    "disposable": {
+      "type": "boolean",
+      "description": "Disposable provider flag"
+    },
+    "free": {
+      "type": "boolean",
+      "description": "Free provider flag"
+    },
+    "score": {
+      "type": "number",
+      "description": "0.0 - 1.0 quality score"
+    }
+  },
+  "required": [
+    "email", "user", "domain",
+    "format_valid", "mx_found", "smtp_check",
+    "role", "disposable", "free", "score"
+  ]
+}

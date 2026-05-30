@@ -1,0 +1,121 @@
+extends:
+  - spectral:oas
+rules:
+  # Enforce mailboxlayer's documentation conventions
+
+  mailboxlayer-operation-summary-required:
+    description: Every operation must have a summary.
+    given: $.paths[*][get,post,put,delete,patch]
+    severity: error
+    then:
+      field: summary
+      function: truthy
+
+  mailboxlayer-operation-summary-title-case:
+    description: Operation summaries should use Title Case (each major word capitalized).
+    given: $.paths[*][get,post,put,delete,patch].summary
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: "^([A-Z][a-z0-9]*)(\\s+(A|An|And|As|At|But|By|For|In|Of|On|Or|The|To|With|[A-Z][A-Za-z0-9]*))*$"
+
+  mailboxlayer-operation-id-required:
+    description: Every operation must define operationId.
+    given: $.paths[*][get,post,put,delete,patch]
+    severity: error
+    then:
+      field: operationId
+      function: truthy
+
+  mailboxlayer-operation-tags-required:
+    description: Every operation must have at least one tag.
+    given: $.paths[*][get,post,put,delete,patch]
+    severity: error
+    then:
+      field: tags
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          minItems: 1
+
+  mailboxlayer-access-key-required:
+    description: Every operation must accept the `access_key` query parameter for authentication.
+    given: $.paths[*][get,post,put,delete,patch]
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            parameters:
+              type: array
+              contains:
+                type: object
+                properties:
+                  name:
+                    const: access_key
+                  in:
+                    const: query
+                required: [name, in]
+          required: [parameters]
+
+  mailboxlayer-server-host:
+    description: Servers should use the canonical apilayer.net host.
+    given: $.servers[*].url
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https?://apilayer\\.net/api"
+
+  mailboxlayer-success-response-defined:
+    description: Every operation must define a 200 response.
+    given: $.paths[*][get,post,put,delete,patch].responses
+    severity: error
+    then:
+      field: "200"
+      function: truthy
+
+  mailboxlayer-response-content-json:
+    description: Responses should be returned as application/json.
+    given: $.paths[*][get,post,put,delete,patch].responses[*].content
+    severity: warn
+    then:
+      field: application/json
+      function: truthy
+
+  mailboxlayer-info-contact-email:
+    description: API info must include a support contact email.
+    given: $.info.contact
+    severity: warn
+    then:
+      field: email
+      function: truthy
+
+  mailboxlayer-info-terms-of-service:
+    description: API info should reference terms of service.
+    given: $.info
+    severity: info
+    then:
+      field: termsOfService
+      function: truthy
+
+  mailboxlayer-security-scheme-apikey:
+    description: Security schemes must include an API key in the query string named `access_key`.
+    given: $.components.securitySchemes[*]
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            type:
+              const: apiKey
+            in:
+              const: query
+            name:
+              const: access_key
