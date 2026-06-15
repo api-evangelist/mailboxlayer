@@ -1,0 +1,69 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "mailboxlayer API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "access_key",
+      "value": "{{access_key}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Verification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Verify Email Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://apilayer.net/api/check",
+            "params": [
+              {
+                "name": "access_key",
+                "value": "",
+                "type": "query",
+                "description": "Your mailboxlayer API access key."
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "The email address to verify."
+              },
+              {
+                "name": "smtp",
+                "value": "",
+                "type": "query",
+                "description": "Set to `0` to skip the real-time SMTP check (default `1`)."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Set to `1` to pretty-print the JSON response (default `0`)."
+              },
+              {
+                "name": "callback",
+                "value": "",
+                "type": "query",
+                "description": "JSONP callback function name. Wraps the JSON response in a function call."
+              }
+            ]
+          },
+          "docs": "Verifies a single email address. Performs syntax validation, MX-record\nlookup, SMTP verification (optional), catch-all detection, role-address\ndetection, free-provider detection, disposable-provider detection,\ndid-you-mean suggestion, and returns a deliverability quality score.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

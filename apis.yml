@@ -1,11 +1,10 @@
 aid: mailboxlayer
 name: mailboxlayer
 description: >-
-  mailboxlayer is an apilayer-owned REST JSON API for email address verification.
-  It performs syntax and typo checks, MX-record lookup, real-time SMTP verification,
-  catch-all detection, role-address detection, free and disposable provider
-  detection, and returns a numeric deliverability quality score. Useful for
-  signup-form validation, list hygiene, lead enrichment, and fraud prevention.
+  mailboxlayer is an apilayer-owned REST JSON API for email address verification. It performs syntax and typo checks,
+  MX-record lookup, real-time SMTP verification, catch-all detection, role-address detection, free and disposable
+  provider detection, and returns a numeric deliverability quality score. Useful for signup-form validation, list
+  hygiene, lead enrichment, and fraud prevention.
 url: https://mailboxlayer.com
 image: https://mailboxlayer.com/site_images/mailboxlayer_logo_white.svg
 specificationVersion: '0.20'
@@ -32,10 +31,9 @@ tags:
 apis:
   - name: mailboxlayer Verification API
     description: >-
-      REST JSON API for verifying a single email address. Performs syntax
-      validation, MX-record lookup, real-time SMTP check, catch-all detection,
-      role-address detection, free / disposable provider detection, did-you-mean
-      suggestion, and a 0.0 - 1.0 deliverability quality score.
+      REST JSON API for verifying a single email address. Performs syntax validation, MX-record lookup, real-time SMTP
+      check, catch-all detection, role-address detection, free / disposable provider detection, did-you-mean suggestion,
+      and a 0.0 - 1.0 deliverability quality score.
     humanURL: https://mailboxlayer.com
     baseURL: https://apilayer.net/api
     tags:
@@ -74,8 +72,6 @@ apis:
         url: examples/mailboxlayer-check-result-example.json
       - type: Example
         url: examples/mailboxlayer-check-result-free-example.json
-      - type: NaftikoCapability
-        url: capabilities/mailboxlayer-verification.yaml
       - type: RateLimits
         url: rate-limits/mailboxlayer-rate-limits.yml
 common:

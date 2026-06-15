@@ -1,0 +1,175 @@
+{
+  "item": [
+    {
+      "id": "09c0d065-c14d-469e-a8b0-ed20561112b6",
+      "name": "Verification",
+      "description": {
+        "content": "Email address validation and verification operations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c5c000bc-804b-4cfc-b867-877ca5565f39",
+          "name": "Verify Email Address",
+          "request": {
+            "name": "Verify Email Address",
+            "description": {
+              "content": "Verifies a single email address. Performs syntax validation, MX-record\nlookup, SMTP verification (optional), catch-all detection, role-address\ndetection, free-provider detection, disposable-provider detection,\ndid-you-mean suggestion, and returns a deliverability quality score.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "check"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "access_key",
+                  "value": "<string>",
+                  "description": "(Required) Your mailboxlayer API access key."
+                },
+                {
+                  "disabled": false,
+                  "key": "email",
+                  "value": "<email>",
+                  "description": "(Required) The email address to verify."
+                },
+                {
+                  "disabled": false,
+                  "key": "smtp",
+                  "value": "1",
+                  "description": "Set to `0` to skip the real-time SMTP check (default `1`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "0",
+                  "description": "Set to `1` to pretty-print the JSON response (default `0`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "callback",
+                  "value": "<string>",
+                  "description": "JSONP callback function name. Wraps the JSON response in a function call."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "187deb71-703c-4ca9-ad5f-96f6f31098b8",
+              "name": "Successful verification result. Note the API always returns 200 on a well-formed request; check the `success` field and `error.code` for failures.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "access_key",
+                      "value": "YOUR_ACCESS_KEY"
+                    },
+                    {
+                      "key": "email",
+                      "value": "support@apilayer.net"
+                    },
+                    {
+                      "key": "smtp",
+                      "value": "1"
+                    },
+                    {
+                      "key": "format",
+                      "value": "0"
+                    },
+                    {
+                      "key": "callback",
+                      "value": "myJsonpCallback"
+                    },
+                    {
+                      "key": "access_key",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"email\": \"support@apilayer.net\",\n  \"did_you_mean\": \"\",\n  \"user\": \"support\",\n  \"domain\": \"apilayer.net\",\n  \"format_valid\": true,\n  \"mx_found\": true,\n  \"smtp_check\": true,\n  \"catch_all\": false,\n  \"role\": true,\n  \"disposable\": false,\n  \"free\": false,\n  \"score\": 0.8\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://apilayer.net/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "access_key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a996c184-56a3-420e-a7c0-6fb3b5fc5964",
+    "name": "mailboxlayer API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The mailboxlayer API is a simple REST-based JSON API for thorough email address\nvalidation and verification. In addition to syntax checks, it performs real-time\nSMTP verification, MX-record lookup, catch-all detection, role-address detection,\nfree-provider detection, disposable-provider detection, did-you-mean typo\nsuggestions, and a numeric deliverability quality score.\n\nAuthentication is via an API access key passed as the `access_key` query\nparameter. HTTPS is available on paid plans (Basic and above).\n\n\nContact Support:\n Name: mailboxlayer Customer Support\n Email: support@apilayer.com",
+      "type": "text/plain"
+    }
+  }
+}
