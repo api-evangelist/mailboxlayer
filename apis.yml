@@ -46,7 +46,7 @@ apis:
         url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
       - type: APIReference
         url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
-      - type: Quickstart
+      - type: GettingStarted
         url: https://mailboxlayer.com/quickstart
       - type: Authentication
         url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
@@ -58,19 +58,19 @@ apis:
         url: json-schema/mailboxlayer-error-schema.json
       - type: JSONStructure
         url: json-structure/mailboxlayer-check-result-structure.json
-      - type: JSON-LD
+      - type: JSONLD
         url: json-ld/mailboxlayer-context.jsonld
-      - type: Example
+      - type: Examples
         url: examples/mailboxlayer-check-success-example.json
-      - type: Example
+      - type: Examples
         url: examples/mailboxlayer-check-typo-example.json
-      - type: Example
+      - type: Examples
         url: examples/mailboxlayer-check-disposable-example.json
-      - type: Example
+      - type: Examples
         url: examples/mailboxlayer-check-error-example.json
-      - type: Example
+      - type: Examples
         url: examples/mailboxlayer-check-result-example.json
-      - type: Example
+      - type: Examples
         url: examples/mailboxlayer-check-result-free-example.json
       - type: RateLimits
         url: rate-limits/mailboxlayer-rate-limits.yml
@@ -79,7 +79,7 @@ common:
     url: https://mailboxlayer.com
   - type: Portal
     url: https://mailboxlayer.com/dashboard
-  - type: SignUp
+  - type: Signup
     url: https://mailboxlayer.com/product
   - type: Pricing
     url: https://mailboxlayer.com/product
@@ -95,16 +95,16 @@ common:
     url: https://github.com/apilayer
   - type: GitHubRepository
     url: https://github.com/apilayer/mailboxlayer-API
-  - type: SDK
+  - type: SDKs
     name: Laravel mailboxlayer
     url: https://github.com/ash-jc-allen/laravel-mailboxlayer
-  - type: SDK
+  - type: SDKs
     name: actfong/mailboxlayer (Ruby)
     url: https://github.com/actfong/mailboxlayer
-  - type: SDK
+  - type: SDKs
     name: damienmarchandfr/mailboxlayer-node-client (Node/TypeScript)
     url: https://github.com/damienmarchandfr/mailboxlayer-node-client
-  - type: SDK
+  - type: SDKs
     name: mailboxlayerbundle (Symfony)
     url: https://github.com/ylly/mailboxlayerbundle
   - type: Integrations
