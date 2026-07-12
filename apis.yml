@@ -75,6 +75,10 @@ apis:
       - type: RateLimits
         url: rate-limits/mailboxlayer-rate-limits.yml
 common:
+  - type: DomainSecurity
+    url: security/mailboxlayer-domain-security.yml
+  - type: Authentication
+    url: authentication/mailboxlayer-authentication.yml
   - type: Website
     url: https://mailboxlayer.com
   - type: Portal

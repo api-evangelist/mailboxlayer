@@ -1,0 +1,27 @@
+generated: '2026-07-11'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: mailboxlayer.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  2 07:32:28 2026 GMT
+  hsts: false
+- host: apilayer.net
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 17 23:59:59 2026 GMT
+  hsts: null
+domains:
+- domain: mailboxlayer.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none
+- domain: apilayer.net
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none

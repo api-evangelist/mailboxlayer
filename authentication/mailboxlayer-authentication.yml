@@ -1,0 +1,16 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/mailboxlayer-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - query
+schemes:
+- name: AccessKeyAuth
+  type: apiKey
+  in: query
+  parameter: access_key
+  description: API access key provided when you sign up for a mailboxlayer plan.
+  sources:
+  - openapi/mailboxlayer-openapi.yml
