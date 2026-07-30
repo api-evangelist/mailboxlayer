@@ -6,6 +6,19 @@ description: >-
   provider detection, and returns a numeric deliverability quality score. Useful for signup-form validation, list
   hygiene, lead enrichment, and fraud prevention.
 url: https://mailboxlayer.com
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 image: https://mailboxlayer.com/site_images/mailboxlayer_logo_white.svg
 specificationVersion: '0.20'
 created: '2026-05-28'
@@ -29,52 +42,49 @@ tags:
   - apilayer
   - Public APIs
 apis:
-  - name: mailboxlayer Verification API
-    description: >-
-      REST JSON API for verifying a single email address. Performs syntax validation, MX-record lookup, real-time SMTP
-      check, catch-all detection, role-address detection, free / disposable provider detection, did-you-mean suggestion,
-      and a 0.0 - 1.0 deliverability quality score.
-    humanURL: https://mailboxlayer.com
-    baseURL: https://apilayer.net/api
-    tags:
-      - Email Verification
-      - SMTP
-      - MX Records
-      - Quality Score
-    properties:
-      - type: Documentation
-        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
-      - type: APIReference
-        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
-      - type: GettingStarted
-        url: https://mailboxlayer.com/quickstart
-      - type: Authentication
-        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
-      - type: OpenAPI
-        url: openapi/mailboxlayer-openapi.yml
-      - type: JSONSchema
-        url: json-schema/mailboxlayer-check-result-schema.json
-      - type: JSONSchema
-        url: json-schema/mailboxlayer-error-schema.json
-      - type: JSONStructure
-        url: json-structure/mailboxlayer-check-result-structure.json
-      - type: JSONLD
-        url: json-ld/mailboxlayer-context.jsonld
-      - type: Examples
-        url: examples/mailboxlayer-check-success-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-typo-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-disposable-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-error-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-result-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-result-free-example.json
-      - type: RateLimits
-        url: rate-limits/mailboxlayer-rate-limits.yml
+- aid: mailboxlayer:mailboxlayer-verification-api
+  name: mailboxlayer Verification API
+  description: Email address validation and verification operations.
+  humanURL: https://mailboxlayer.com
+  baseURL: https://apilayer.net/api
+  tags:
+  - Verification
+  properties:
+  - type: OpenAPI
+    url: openapi/mailboxlayer-verification-api-openapi.yml
+  - type: Documentation
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - type: APIReference
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - type: GettingStarted
+    url: https://mailboxlayer.com/quickstart
+  - type: Authentication
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - type: JSONSchema
+    url: json-schema/mailboxlayer-check-result-schema.json
+  - type: JSONSchema
+    url: json-schema/mailboxlayer-error-schema.json
+  - type: JSONStructure
+    url: json-structure/mailboxlayer-check-result-structure.json
+  - type: JSONLD
+    url: json-ld/mailboxlayer-context.jsonld
+  - type: Examples
+    url: examples/mailboxlayer-check-success-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-typo-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-disposable-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-error-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-result-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-result-free-example.json
+  - type: RateLimits
+    url: rate-limits/mailboxlayer-rate-limits.yml
 common:
+  - type: PostmanWorkspace
+    url: https://www.postman.com/kinlaneapi/mailboxlayer/overview
   - type: AgenticAccess
     url: agentic-access/mailboxlayer-agentic-access.yml
   - type: DomainSecurity
