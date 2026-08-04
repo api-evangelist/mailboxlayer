@@ -1,0 +1,171 @@
+{
+  "info": {
+    "_postman_id": "ebeb9e35-3403-4138-9eca-7cb43493ce11",
+    "name": "mailboxlayer Verification API",
+    "description": "The mailboxlayer API is a simple REST-based JSON API for thorough email address\nvalidation and verification. In addition to syntax checks, it performs real-time\nSMTP verification, MX-record lookup, catch-all detection, role-address detection,\nfree-provider detection, disposable-provider detection, did-you-mean typo\nsuggestions, and a numeric deliverability quality score.\n\nAuthentication is via an API access key passed as the `access_key` query\nparameter. HTTPS is available on paid plans (Basic and above).\n\n\nContact Support:\n Name: mailboxlayer Customer Support\n Email: support@apilayer.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T02:08:11.000Z",
+    "updatedAt": "2026-07-28T02:08:12.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-ebeb9e35-3403-4138-9eca-7cb43493ce11"
+  },
+  "item": [
+    {
+      "name": "check",
+      "item": [
+        {
+          "name": "Verify Email Address",
+          "id": "b0cf8966-9d9f-4497-beb9-2ef5bad8cdd4",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/check?access_key=<string>&email=<email>&smtp=1&format=0&callback=<string>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "check"
+              ],
+              "query": [
+                {
+                  "description": "(Required) Your mailboxlayer API access key.",
+                  "key": "access_key",
+                  "value": "<string>"
+                },
+                {
+                  "description": "(Required) The email address to verify.",
+                  "key": "email",
+                  "value": "<email>"
+                },
+                {
+                  "description": "Set to `0` to skip the real-time SMTP check (default `1`).",
+                  "key": "smtp",
+                  "value": "1"
+                },
+                {
+                  "description": "Set to `1` to pretty-print the JSON response (default `0`).",
+                  "key": "format",
+                  "value": "0"
+                },
+                {
+                  "description": "JSONP callback function name. Wraps the JSON response in a function call.",
+                  "key": "callback",
+                  "value": "<string>"
+                }
+              ]
+            },
+            "description": "Verifies a single email address. Performs syntax validation, MX-record\nlookup, SMTP verification (optional), catch-all detection, role-address\ndetection, free-provider detection, disposable-provider detection,\ndid-you-mean suggestion, and returns a deliverability quality score.\n"
+          },
+          "response": [
+            {
+              "id": "148238a8-1bdc-424f-885c-1a9add5c8dd9",
+              "name": "Successful verification result. Note the API always returns 200 on a well-formed request; check the `success` field and `error.code` for failures.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/check?access_key=<API Key>&email=<email>&smtp=1&format=0&callback=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "check"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) Your mailboxlayer API access key.",
+                      "key": "access_key",
+                      "value": "<API Key>"
+                    },
+                    {
+                      "description": "(Required) The email address to verify.",
+                      "key": "email",
+                      "value": "<email>"
+                    },
+                    {
+                      "description": "Set to `0` to skip the real-time SMTP check (default `1`).",
+                      "key": "smtp",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Set to `1` to pretty-print the JSON response (default `0`).",
+                      "key": "format",
+                      "value": "0"
+                    },
+                    {
+                      "description": "JSONP callback function name. Wraps the JSON response in a function call.",
+                      "key": "callback",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"email\": \"<email>\",\n  \"user\": \"<string>\",\n  \"domain\": \"<string>\",\n  \"format_valid\": \"<boolean>\",\n  \"mx_found\": \"<boolean>\",\n  \"smtp_check\": \"<boolean>\",\n  \"role\": \"<boolean>\",\n  \"disposable\": \"<boolean>\",\n  \"free\": \"<boolean>\",\n  \"score\": \"<float>\",\n  \"did_you_mean\": \"<string>\",\n  \"catch_all\": \"<boolean>\"\n}",
+              "createdAt": "2026-07-28T02:08:12.000Z",
+              "updatedAt": "2026-07-28T02:08:12.000Z",
+              "uid": "35240-148238a8-1bdc-424f-885c-1a9add5c8dd9"
+            }
+          ],
+          "createdAt": "2026-07-28T02:08:12.000Z",
+          "updatedAt": "2026-07-28T02:08:12.000Z",
+          "uid": "35240-b0cf8966-9d9f-4497-beb9-2ef5bad8cdd4"
+        }
+      ],
+      "id": "a99b6c6e-05ce-4109-b481-c41fab666802",
+      "createdAt": "2026-07-28T02:08:12.000Z",
+      "updatedAt": "2026-07-28T02:08:12.000Z",
+      "uid": "35240-a99b6c6e-05ce-4109-b481-c41fab666802"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "access_key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "query",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://apilayer.net/api"
+    }
+  ]
+}

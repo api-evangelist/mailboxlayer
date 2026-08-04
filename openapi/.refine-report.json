@@ -1,0 +1,14 @@
+{
+  "provider": "mailboxlayer",
+  "sources": [
+    "mailboxlayer-verification-api-openapi.yml"
+  ],
+  "outputs": [
+    "mailboxlayer-verification-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
