@@ -83,6 +83,8 @@ apis:
   - type: RateLimits
     url: rate-limits/mailboxlayer-rate-limits.yml
 common:
+  - type: IssueTracker
+    url: https://github.com/apilayer/mailboxlayer-API/issues
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/mailboxlayer/overview
   - type: AgenticAccess
