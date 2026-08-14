@@ -22,7 +22,7 @@ accessModel:
 image: https://mailboxlayer.com/site_images/mailboxlayer_logo_white.svg
 specificationVersion: '0.20'
 created: '2026-05-28'
-modified: '2026-05-30'
+modified: '2026-08-14'
 x-source: public-apis/public-apis
 x-category: Email
 x-tier: 3
@@ -82,6 +82,17 @@ apis:
     url: examples/mailboxlayer-check-result-free-example.json
   - type: RateLimits
     url: rate-limits/mailboxlayer-rate-limits.yml
+  - type: OpenAPI
+    name: mailboxlayer API (provider-published, SwaggerHub OpenAPI 3.1.0)
+    url: openapi/_original/mailboxlayer-swaggerhub-openapi.json
+  - type: Overlay
+    url: overlays/mailboxlayer-verification-api-overlay.yaml
+  - type: Conventions
+    url: conventions/mailboxlayer-conventions.yml
+  - type: ErrorCatalog
+    url: errors/mailboxlayer-problem-types.yml
+  - type: DataModel
+    url: data-model/mailboxlayer-data-model.yml
 common:
   - type: IssueTracker
     url: https://github.com/apilayer/mailboxlayer-API/issues
@@ -108,7 +119,49 @@ common:
   - type: PrivacyPolicy
     url: https://mailboxlayer.com/privacy
   - type: Support
-    url: https://mailboxlayer.com/support
+    url: https://apilayer.com/support/
+  - type: HelpCenter
+    url: https://mailboxlayer.com/contact
+  - type: Community
+    name: APILayer Discord
+    url: https://discord.com/invite/hgjA78638n
+  - type: DeveloperPortal
+    url: https://docs.apilayer.com/mailboxlayer/
+  - type: Documentation
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - type: APIReference
+    url: https://docs.apilayer.com/mailboxlayer/docs/mailboxlayer-api-v-1-0-0
+  - type: Blog
+    url: https://blog.apilayer.com/
+  - type: FAQ
+    url: https://mailboxlayer.com/faq
+  - type: StatusPage
+    url: https://mailboxlayer.com/api-status
+  - type: Lifecycle
+    url: lifecycle/mailboxlayer-lifecycle.yml
+  - type: Sandbox
+    name: APILayer Developers Playground
+    url: https://apilayer.com/playground/
+  - type: Conventions
+    url: conventions/mailboxlayer-conventions.yml
+  - type: ErrorCatalog
+    url: errors/mailboxlayer-problem-types.yml
+  - type: DataModel
+    url: data-model/mailboxlayer-data-model.yml
+  - type: Conformance
+    url: conformance/mailboxlayer-conformance.yml
+  - type: Packages
+    url: packages/mailboxlayer-packages.yml
+  # No MCPServer pointer: mcp/mailboxlayer-mcp.yml is a DERIVED CANDIDATE with
+  # deployment.mode: none. APILayer ships no MCP server, remote or stdio. Wiring
+  # type: MCPServer here would credit mailboxlayer with an agent surface it does
+  # not have — the same error as advertising WellKnown over a 404 probe.
+  - type: LLMsTxt
+    url: llms/mailboxlayer-llms.txt
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Overlay
+    url: overlays/mailboxlayer-verification-api-overlay.yaml
   - type: GitHubOrganization
     url: https://github.com/apilayer
   - type: GitHubRepository
@@ -209,6 +262,12 @@ common:
         description: $249.99/mo for 250,000 requests; adds bulk endpoint (100 emails) and richer SLAs.
       - name: Custom
         description: Contact sales for higher volumes and bespoke arrangements.
+x-enrichment:
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 10
+  pass: local-v1
+
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
