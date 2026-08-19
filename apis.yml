@@ -19,7 +19,7 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 image: https://mailboxlayer.com/site_images/mailboxlayer_logo_white.svg
-specificationVersion: '0.21'
+specificationVersion: '0.23'
 created: '2026-05-28'
 modified: '2026-08-14'
 x-source: public-apis/public-apis
