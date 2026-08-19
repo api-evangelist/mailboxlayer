@@ -6,5 +6,14 @@
     "source_type": "Portal",
     "file": "mailboxlayer-2026-06-20T184850.png",
     "bytes": 257552
+  },
+  {
+    "repo": "mailboxlayer",
+    "captured_at": "2026-08-17T124041",
+    "source_url": "https://mailboxlayer.com",
+    "source_type": "root-domain",
+    "file": "mailboxlayer-2026-08-17T124041.png",
+    "bytes": 316209,
+    "capture": "playwright-local"
   }
 ]

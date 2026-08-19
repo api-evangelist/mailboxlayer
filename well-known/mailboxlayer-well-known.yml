@@ -1,0 +1,100 @@
+generated: '2026-08-14'
+method: probed
+source: live HTTP probes of every mailboxlayer / apilayer host, 2026-08-14
+result: no-documents-found
+description: >-
+  Recorded ABSENCE. Not one /.well-known/ document is served on any host associated with
+  mailboxlayer. Two distinct failure modes were observed and they are recorded separately
+  because they mean different things.
+
+  1. The website, docs portal and parent-brand hosts (mailboxlayer.com, docs.apilayer.com,
+     apilayer.com) return an honest HTTP 404 with an HTML page for every /.well-known/ path.
+
+  2. The API host apilayer.net returns HTTP 200 for EVERY path — including paths that
+     cannot exist — with the mailboxlayer error envelope
+     {"success": false, "error": {"code": 101, "type": "invalid_access_key", ...}}.
+     This is a catch-all soft-200, NOT a document. It is recorded as a MISS. A probe that
+     trusted the status code alone would credit apilayer.net with a security.txt, an
+     OpenID configuration, an OAuth authorization server AND an agent card, none of which
+     exist.
+
+  Because nothing returned a real document, NO `WellKnown` and NO `SecurityTxt` pointer is
+  emitted in apis.yml. This file documents an absence; it must never be scored as a presence.
+
+hosts:
+  - host: https://apilayer.net
+    role: api-base (apis.yml baseURL and OpenAPI servers[0])
+    behavior: catch-all-soft-200
+    documents:
+      - {path: /.well-known/security.txt, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /.well-known/openid-configuration, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /.well-known/oauth-authorization-server, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /.well-known/api-catalog, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /.well-known/ai-plugin.json, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /.well-known/agent-card.json, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /.well-known/agent.json, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /openapi.json, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /swagger.json, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /api-docs, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+      - {path: /llms.txt, status: 200, document: false, note: mailboxlayer error envelope, code 101}
+
+  - host: https://mailboxlayer.com
+    role: website / humanURL
+    behavior: honest-404
+    documents:
+      - {path: /.well-known/security.txt, status: 404, document: false}
+      - {path: /.well-known/openid-configuration, status: 404, document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+      - {path: /.well-known/api-catalog, status: 404, document: false}
+      - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+      - {path: /.well-known/agent-card.json, status: 404, document: false}
+      - {path: /.well-known/agent.json, status: 404, document: false}
+      - path: /llms.txt
+        status: 200
+        document: true
+        file: ../llms/mailboxlayer-llms.txt
+        note: >-
+          Not a /.well-known/ path, but the one machine-readable discovery document
+          mailboxlayer actually serves. Captured in llms/ and pointed at as LLMsTxt.
+
+  - host: https://docs.apilayer.com
+    role: documentation portal (SwaggerHub Portal)
+    behavior: honest-404
+    documents:
+      - {path: /.well-known/security.txt, status: 404, document: false}
+      - {path: /.well-known/agent-card.json, status: 404, document: false}
+      - {path: /.well-known/agent.json, status: 404, document: false}
+      - {path: /.well-known/openid-configuration, status: 404, document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+      - {path: /.well-known/api-catalog, status: 404, document: false}
+      - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+      - {path: /llms.txt, status: 404, document: false}
+
+  - host: https://apilayer.com
+    role: parent brand
+    behavior: honest-404
+    documents:
+      - {path: /.well-known/security.txt, status: 404, document: false}
+      - {path: /.well-known/agent-card.json, status: 404, document: false}
+      - {path: /.well-known/agent.json, status: 404, document: false}
+      - {path: /.well-known/openid-configuration, status: 404, document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+      - {path: /.well-known/api-catalog, status: 404, document: false}
+      - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+      - path: /llms.txt
+        status: 200
+        document: true
+        note: >-
+          Parent-brand llms.txt for the whole APILayer marketplace. Real, but it belongs
+          to apilayer.com, not to mailboxlayer, so it is recorded here rather than saved
+          into this repo.
+
+remediation:
+  for_provider:
+    - >-
+      Serve /.well-known/security.txt (RFC 9116) on mailboxlayer.com naming a Contact and
+      a Policy URL. APILayer currently publishes no vulnerability-disclosure address at all.
+    - >-
+      Stop returning HTTP 200 from apilayer.net for unrouted paths. A 404 for an unknown
+      path is what lets any client — human, crawler, or agent — tell "not found" from
+      "found but unauthorized".

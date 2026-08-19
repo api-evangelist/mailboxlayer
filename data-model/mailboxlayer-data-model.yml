@@ -1,0 +1,147 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/_original/mailboxlayer-swaggerhub-openapi.json
+sources:
+  - openapi/_original/mailboxlayer-swaggerhub-openapi.json
+  - https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  - https://docs.apilayer.com/mailboxlayer/docs/api-validation-tools
+description: >-
+  Entity graph derived from components.schemas of the OpenAPI 3.1.0 that APILayer publishes
+  for mailboxlayer. Re-derived 2026-08-14 from the provider's own SwaggerHub document rather
+  than from this repo's thinner refined spec, which adds the bulk response shape and the
+  RequestValidationError entity that were previously missing.
+
+  The model is deliberately flat: mailboxlayer is a stateless lookup service that returns a
+  computed verification result. It persists no customer-addressable resources, so there are
+  no ids, no id-prefixes, and no cross-entity foreign keys.
+
+stateful: false
+id_scheme: none
+
+entities:
+  - name: EmailValidationResponse
+    aliases: [CheckResult]
+    description: >-
+      Successful email verification result. Returned as a single object by GET /check and
+      as an array element by GET /bulk_check.
+    source_schema: openapi/_original/mailboxlayer-swaggerhub-openapi.json#/components/schemas/EmailValidationResponse
+    identifier: null
+    fields:
+      - {name: email, type: string, format: email, description: The address submitted for verification.}
+      - name: did_you_mean
+        type: string
+        description: >-
+          Suggested address when a likely typo was detected in the domain part; empty string
+          otherwise. Advisory only — it does not affect any other field.
+      - {name: user, type: string, description: Local part of the address (before the @).}
+      - {name: domain, type: string, description: Domain part of the address (after the @).}
+      - {name: format_valid, type: boolean, description: Syntax is valid per RFC 5322/5321.}
+      - {name: mx_found, type: boolean, description: MX records exist for the domain.}
+      - name: smtp_check
+        type: boolean
+        description: >-
+          SMTP server accepts mail for the mailbox. Always the result of a live SMTP
+          conversation unless smtp=0 was passed.
+      - name: catch_all
+        type: boolean
+        nullable: true
+        description: >-
+          Domain accepts mail for any local part. TRI-STATE — null means the check did not
+          run (catch_all=1 not requested, or plan does not permit it). Paid plans only.
+      - {name: role, type: boolean, description: Address is role-based (support@, postmaster@).}
+      - {name: disposable, type: boolean, description: Domain belongs to a disposable provider.}
+      - {name: free, type: boolean, description: Domain belongs to a free webmail provider.}
+      - name: score
+        type: number
+        range: 0.0-1.0
+        description: >-
+          Composite deliverability quality score. No banding is published; the quickstart
+          cites 0.8 as generally high-quality.
+
+  - name: ApiError
+    description: >-
+      Error envelope. Returned with HTTP 200 for service-level failures, and also as the
+      body of the declared 401 / 403 / 404 / 429 / 500 / 503 responses.
+    source_schema: openapi/_original/mailboxlayer-swaggerhub-openapi.json#/components/schemas/ApiError
+    identifier: error.type
+    fields:
+      - {name: success, type: boolean, description: Always false on this shape.}
+      - {name: error, type: object, description: The error detail object.}
+      - name: error.code
+        type: integer
+        description: >-
+          Numeric error code. NOT unique — 101, 104 and 105 each cover several distinct types.
+      - name: error.type
+        type: string
+        description: Machine-readable error identifier. The reliable discriminator.
+      - {name: error.info, type: string, description: Human-readable description and suggested fix.}
+    reference: errors/mailboxlayer-problem-types.yml
+
+  - name: RequestValidationError
+    description: >-
+      FastAPI request-validation body, returned with HTTP 422 when a required query
+      parameter is missing or malformed. Structurally incompatible with ApiError — no
+      `success` flag, no `error` object.
+    source_schema: openapi/_original/mailboxlayer-swaggerhub-openapi.json#/components/schemas/RequestValidationError
+    identifier: null
+    fields:
+      - {name: detail, type: array, description: List of validation failures.}
+      - {name: 'detail[].loc', type: array, description: 'Path to the offending input, e.g. ["query","email"].'}
+      - {name: 'detail[].msg', type: string, description: 'Human-readable message, e.g. "field required".'}
+      - {name: 'detail[].type', type: string, description: 'Validation error type, e.g. "value_error.missing".'}
+
+relationships:
+  - from: ApiError
+    to: error
+    kind: has_one
+    via: error
+    evidence: inline object under ApiError.properties.error
+  - from: RequestValidationError
+    to: detail
+    kind: has_many
+    via: detail
+    evidence: array under RequestValidationError.properties.detail
+
+response_unions:
+  - operation: checkEmail
+    path: /check
+    http_status: 200
+    members: [EmailValidationResponse, ApiError]
+    discriminator: >-
+      Presence of the `success` field. EmailValidationResponse never carries it; ApiError
+      always does and always sets it false.
+    evidence: oneOf at paths./check.get.responses.200.content.application/json.schema
+  - operation: bulkCheckEmails
+    path: /bulk_check
+    http_status: 200
+    members: ['array<EmailValidationResponse>', ApiError]
+    discriminator: >-
+      JSON type. A successful bulk call returns an ARRAY; a failure returns an OBJECT with
+      `success: false`. A client must type-check the top-level value before indexing it.
+    evidence: oneOf at paths./bulk_check.get.responses.200.content.application/json.schema
+
+conceptual_subjects:
+  - name: Email Address
+    description: >-
+      The address under verification is the primary subject of the model, but it is an
+      input value, not a stored resource. mailboxlayer returns no handle by which a prior
+      check can be retrieved, re-read, or referenced in a support conversation.
+  - name: Domain
+    description: >-
+      Derived from the address; the target of the MX, catch-all, free and disposable
+      checks. Not addressable on its own — there is no domain-level endpoint.
+
+reference_data:
+  - name: Free provider database
+    description: Daily-updated list of free webmail providers backing the `free` field.
+    addressable: false
+  - name: Disposable provider database
+    description: Daily-updated list of throwaway providers backing the `disposable` field.
+    addressable: false
+
+reference_data_note: >-
+  Both databases are described in the documentation as regularly updated, but neither is
+  exposed as an API resource — there is no endpoint to list, query, or diff them, and no
+  published update cadence beyond "daily".
+
+render: null

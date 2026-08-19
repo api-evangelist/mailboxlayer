@@ -1,15 +1,75 @@
 apiCommonsRateLimits: "0.1"
+generated: '2026-08-14'
+method: searched
+source: https://docs.apilayer.com/mailboxlayer/docs/getting-started
+sources:
+  - https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  - https://mailboxlayer.com/product
+  - https://api.swaggerhub.com/apis/apilayer-863/MailboxlayerAPI/1.0.0/swagger.json
 provider:
   id: mailboxlayer
   name: mailboxlayer
   url: https://mailboxlayer.com
-modified: '2026-05-30'
+modified: '2026-08-14'
 
 scope:
   description: >-
-    mailboxlayer enforces request quotas as monthly subscription allowances tied to
-    the API access key. There is no published per-second / per-minute request-rate
-    cap or concurrency limit; throttling is performed by monthly volume.
+    mailboxlayer enforces limits at THREE independent layers, all keyed to the API access
+    key: a published per-minute request rate, a monthly subscription allowance, and an
+    undisclosed daily cap plus an undisclosed fair-use ceiling that only surface as errors.
+  correction: >-
+    UPGRADE 2026-08-14. This file previously stated there was "no published per-second /
+    per-minute request-rate cap". That was wrong. The provider publishes a per-minute rate
+    limit table by plan in the Getting Started documentation, and a distinct
+    `rate_limit_reached` error (code 106, HTTP 429) for breaching it.
+
+limit_count: 4
+
+rateLimits:
+  - id: free-per-minute
+    plan: free
+    scope: per-key
+    metric: requests
+    limit: 50
+    window: minute
+    enforcement: hard
+    exceeded_error: {code: 106, type: rate_limit_reached, http_status: 429}
+  - id: basic-per-minute
+    plan: basic
+    scope: per-key
+    metric: requests
+    limit: 100
+    window: minute
+    enforcement: hard
+    exceeded_error: {code: 106, type: rate_limit_reached, http_status: 429}
+  - id: professional-per-minute
+    plan: professional-plus
+    scope: per-key
+    metric: requests
+    limit: 300
+    window: minute
+    enforcement: hard
+    exceeded_error: {code: 106, type: rate_limit_reached, http_status: 429}
+  - id: enterprise-per-minute
+    plan: enterprise-plus
+    scope: per-key
+    metric: requests
+    limit: 300
+    window: minute
+    enforcement: hard
+    exceeded_error: {code: 106, type: rate_limit_reached, http_status: 429}
+    note: >-
+      Enterprise Plus carries the SAME per-minute ceiling as Professional Plus (300/min).
+      The higher tier buys monthly volume and a larger bulk batch, not more throughput.
+
+recommendedThroughput:
+  max_requests_per_second: 5
+  quote: >-
+    "In order to ensure maximum API performance, we recommend all users to limit their
+    usage to a maximum of 5 API requests per second."
+  note: >-
+    Advisory, not enforced. 5 rps is 300/minute, so the recommendation and the top-tier
+    per-minute ceiling coincide.
 
 quotas:
   - id: free-monthly-quota
@@ -61,35 +121,88 @@ quotas:
     enforcement: soft
     notes: Volume negotiated; pricing on contact-sales basis.
 
+undisclosedLimits:
+  - id: daily-cap
+    metric: requests
+    limit: undisclosed
+    period: day
+    evidence:
+      error: {code: 104, type: daily_usage_limit_reached, http_status: 429}
+      message: >-
+        Your daily usage limit has been reached. Please try again tomorrow or upgrade your
+        subscription plan.
+    note: >-
+      A daily ceiling exists in addition to the monthly allowance, but no figure is
+      published on the pricing page or in the documentation. An integrator cannot plan
+      around it — they can only handle the error.
+  - id: fair-use-ceiling
+    metric: requests
+    limit: undisclosed
+    period: undisclosed
+    evidence:
+      error: {code: 104, type: fair_use_limit_reached, http_status: 429}
+      message: 'Your fair use limit has been reached. [Please contact support: support@apilayer.com]'
+    note: An unpublished fair-use threshold sits above the plan allowance.
+
 bulkLimits:
   - id: professional-plus-bulk
     plan: professional-plus
-    endpoint: bulk
+    endpoint: /bulk_check
     maxEmailsPerRequest: 25
+    exceeded_error: {code: 231, type: bulk_limit_exceeded, http_status: 200}
   - id: enterprise-plus-bulk
     plan: enterprise-plus
-    endpoint: bulk
+    endpoint: /bulk_check
     maxEmailsPerRequest: 100
+    exceeded_error: {code: 231, type: bulk_limit_exceeded, http_status: 200}
+  - id: bulk-plan-gate
+    plans_without_access: [free, basic]
+    note: >-
+      /bulk_check is not available on Free or Basic. Calling it returns error 105
+      (function_access_restricted, HTTP 403). One bulk call counts as ONE billable request
+      regardless of how many addresses it carries — the cheapest way to stay under both the
+      per-minute rate limit and the monthly allowance.
+
+headers:
+  response_headers: []
+  retry_after: false
+  description: >-
+    mailboxlayer publishes NO rate-limit response headers. There is no X-RateLimit-*, no
+    RateLimit-* (RFC 9331 draft), and no Retry-After. Remaining quota and remaining
+    per-minute budget are not observable at runtime.
+  agent_impact: >-
+    An agent cannot pace itself against this API. It cannot read how much budget is left,
+    and it is not told how long to wait after a 429 — the only signals are the terminal
+    errors 106 (rate), 104 (monthly / daily / fair-use) and, on the 200 path, the error
+    envelope. Exponential backoff on 429 and a client-side token bucket set to the plan's
+    per-minute figure are the only workable strategies.
 
 policies:
   exceeded-behavior:
-    description: >-
-      When the monthly quota is exhausted, the API responds with HTTP 200 and an
-      error envelope containing `error.code: 104` / `error.type: usage_limit_reached`
-      until the next monthly reset (or until an overage-eligible plan is upgraded).
+    per_minute: HTTP 429 with error code 106 / rate_limit_reached.
+    monthly: HTTP 429 with error code 104 / usage_limit_reached.
+    daily: HTTP 429 with error code 104 / daily_usage_limit_reached.
+    fair_use: HTTP 429 with error code 104 / fair_use_limit_reached.
+    note: >-
+      Historically, quota exhaustion surfaced as HTTP 200 with the 104 envelope. The
+      provider's current published spec declares a real 429 for all four exhaustion types.
+      Handle both: check the status AND the envelope.
   https-restriction:
     description: >-
-      HTTPS is only available on Basic and above. Free-plan keys attempting to call
-      `https://apilayer.net/api/check` receive error code 105 (https_access_restricted).
+      Error 105 (https_access_restricted) remains in the published error catalog, but both
+      https://mailboxlayer.com/product and the Getting Started docs now list 256-bit HTTPS
+      encryption as available on ALL plans including Free (checked 2026-08-14).
   reset-cadence:
-    description: Quotas reset on the subscription's monthly billing anniversary.
+    description: >-
+      Monthly allowance resets on the subscription's billing anniversary. The per-minute
+      window is a rolling minute. The daily cap reset time is not published.
 
-headers:
-  description: >-
-    mailboxlayer does not document standard `X-RateLimit-*` response headers.
-    Quota state is reported in the JSON error envelope when the limit is reached.
+cors:
+  supported: true
+  source: https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  note: The API supports Access-Control (CORS) headers and JSONP via the `callback` parameter.
 
 contact:
   type: Support
   email: support@apilayer.com
-  url: https://mailboxlayer.com/support
+  url: https://apilayer.com/support/

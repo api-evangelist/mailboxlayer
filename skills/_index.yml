@@ -1,0 +1,28 @@
+generated: '2026-08-14'
+method: generated
+source: >-
+  openapi/_original/mailboxlayer-swaggerhub-openapi.json plus the mailboxlayer developer
+  documentation at https://docs.apilayer.com/mailboxlayer/
+description: >-
+  Packaged Agent Skills for the mailboxlayer Verification API. Every step is grounded in an
+  operationId that exists verbatim in the OpenAPI 3.1.0 APILayer publishes on SwaggerHub —
+  checkEmail and bulkCheckEmails are the only two operations mailboxlayer has. Searched
+  first for provider-published skills or an AGENTS.md; APILayer publishes none.
+provider_published_skills: false
+skills:
+  - file: mailboxlayer-verify-single-address.md
+    name: Verify a single email address with mailboxlayer
+    api: openapi/_original/mailboxlayer-swaggerhub-openapi.json
+    operations: [checkEmail]
+    summary: >-
+      Single-address verification, correct response handling across the vendor envelope,
+      the 422 FastAPI shape and the HTTP error responses, plus the three field traps
+      (tri-state catch_all, advisory did_you_mean, unbanded score).
+  - file: mailboxlayer-bulk-list-hygiene.md
+    name: Clean an email list in bulk with mailboxlayer
+    api: openapi/_original/mailboxlayer-swaggerhub-openapi.json
+    operations: [bulkCheckEmails, checkEmail]
+    summary: >-
+      Plan-gated bulk verification: batch sizing to the 25/100 ceilings, the array-vs-object
+      response ambiguity, quota arithmetic, pacing without rate-limit headers, and the
+      per-address fallback when the plan has no bulk access.

@@ -1,0 +1,110 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the mailboxlayer Verification API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-14'
+  method: generated
+  source: >-
+    openapi/mailboxlayer-verification-api-openapi.yml, reconciled against the OpenAPI
+    3.1.0 that APILayer publishes at
+    https://api.swaggerhub.com/apis/apilayer-863/MailboxlayerAPI/1.0.0/swagger.json
+    and the developer documentation at
+    https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  note: >-
+    This overlay records API Evangelist enhancements only. It never mutates the harvested
+    specs in openapi/_original/. The most important thing it records is a DIVERGENCE: the
+    refined spec in openapi/ carries one operation (checkEmail) while the provider's own
+    published spec carries two (checkEmail and bulkCheckEmails) plus HTTP-level 4xx/5xx
+    responses and a catch_all query parameter. The overlay documents that gap rather than
+    silently patching it.
+extends: openapi/mailboxlayer-verification-api-openapi.yml
+actions:
+  - target: $.info
+    description: Record provenance, the canonical provider-published contract, and the divergence.
+    update:
+      x-apievangelist-profile: https://apis.io/provider/mailboxlayer
+      x-provider-published-spec: https://api.swaggerhub.com/apis/apilayer-863/MailboxlayerAPI/1.0.0/swagger.json
+      x-provider-docs: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+      x-parent-brand: APILayer (Idera, Inc.)
+      x-spec-divergence:
+        missing_operations: [bulkCheckEmails]
+        missing_parameters: [catch_all]
+        missing_responses: ['401', '403', '404', '422', '429', '500', '503']
+        note: >-
+          Present in the provider's SwaggerHub 3.1.0 document, absent from this refined
+          file. Use openapi/_original/mailboxlayer-swaggerhub-openapi.json as the contract
+          of record until the refined split is regenerated from it.
+
+  - target: $.info
+    description: Record the runtime semantics an agent must know before calling this API.
+    update:
+      x-error-model:
+        style: vendor-envelope
+        http_status_on_service_error: 200
+        discriminator: success
+        catalog: errors/mailboxlayer-problem-types.yml
+        warning: >-
+          A 200 is not evidence the verification ran. Branch on `success` and `error.code`,
+          never on the HTTP status alone.
+      x-rate-limits:
+        documented: true
+        source: https://docs.apilayer.com/mailboxlayer/docs/getting-started
+        per_minute_by_plan: {free: 50, basic: 100, professional: 300, enterprise: 300}
+        recommended_max_rps: 5
+        exhaustion_error: {code: 106, type: rate_limit_reached, http_status: 429}
+        response_headers: []
+        catalog: rate-limits/mailboxlayer-rate-limits.yml
+      x-idempotency:
+        supported: false
+        reason: read-only GET surface; no mutation to de-duplicate
+      x-cors: true
+      x-jsonp: true
+
+  - target: $.servers
+    description: >-
+      Both server entries in the refined spec carry the identical URL and differ only in
+      their description. Record that HTTPS is now advertised on every plan, including Free,
+      which contradicts the older HTTP-only-on-Free framing still implied by error 105.
+    update:
+      - url: https://apilayer.net/api
+        description: >-
+          Production endpoint. 256-bit HTTPS is listed as available on all plans, Free
+          included, on both https://mailboxlayer.com/product and
+          https://docs.apilayer.com/mailboxlayer/docs/getting-started (checked 2026-08-14).
+          Error 105 (https_access_restricted) nevertheless remains in the published error
+          catalog, so treat plan-level HTTPS restriction as still possible.
+
+  - target: $.paths./check.get
+    description: Ground the operation in the vocabulary and hazards captured elsewhere in this repo.
+    update:
+      x-agentic-access:
+        action-class: connected
+        consequence: read
+        token: {max-ttl: 3600}
+        audit: none
+      x-vocabulary: vocabulary/mailboxlayer-vocabulary.yml
+      x-skills: [skills/mailboxlayer-verify-single-address.md]
+      x-missing-parameter:
+        name: catch_all
+        in: query
+        note: >-
+          Documented by the provider and present in its SwaggerHub spec; absent from this
+          refined file. Catch-all detection is OFF by default and `catch_all` returns null
+          unless `catch_all=1` is sent on a plan that permits it.
+
+  - target: $.components.schemas.CheckResult.properties.score
+    description: State the interpretation the docs give for the score, which the schema omits.
+    update:
+      x-interpretation: >-
+        0.0-1.0 composite deliverability score. The provider's quickstart cites 0.8 as
+        "generally considered high-quality and deliverable". No banding is published, so
+        any threshold an integrator picks is their own policy, not the provider's.
+
+  - target: $.components.schemas.CheckResult.properties.catch_all
+    description: Make the tri-state explicit — null is not false.
+    update:
+      x-tri-state: >-
+        true / false / null. null means catch-all detection did not run — either
+        `catch_all=1` was not requested or the plan does not permit it (error 310,
+        catch_all_access_restricted). Reading null as false is a silent misclassification.

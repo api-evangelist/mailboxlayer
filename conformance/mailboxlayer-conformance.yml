@@ -1,0 +1,172 @@
+generated: '2026-08-14'
+method: searched
+source: https://docs.apilayer.com/mailboxlayer/docs/api-validation-tools
+sources:
+  - https://docs.apilayer.com/mailboxlayer/docs/api-validation-tools
+  - https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  - openapi/_original/mailboxlayer-swaggerhub-openapi.json
+  - security/mailboxlayer-domain-security.yml
+description: >-
+  Which cross-cutting standards the mailboxlayer Verification API actually conforms to.
+  Searched against the provider's own documentation and derived from the OpenAPI 3.1.0
+  APILayer publishes on SwaggerHub. No compliance certifications of any kind are published
+  for mailboxlayer or APILayer, so NO `Compliance` pointer is emitted — see
+  compliance_program below.
+
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: >-
+      APILayer publishes an OpenAPI 3.1.0 document at
+      https://api.swaggerhub.com/apis/apilayer-863/MailboxlayerAPI/1.0.0/swagger.json,
+      rendered on its own docs host at docs.apilayer.com/mailboxlayer. Harvested verbatim
+      to openapi/_original/mailboxlayer-swaggerhub-openapi.json.
+
+  - id: rfc5322-email-syntax
+    conforms: true
+    evidence: >-
+      The provider explicitly documents its syntax check against RFC 5322 and RFC 5321,
+      citing RFC 3696 for the readable form, and enumerates the permitted local-part and
+      domain-part character classes.
+      https://docs.apilayer.com/mailboxlayer/docs/api-validation-tools
+
+  - id: smtp-rfc5321
+    conforms: true
+    evidence: >-
+      Real-time verification opens an SMTP conversation with the recipient mail server
+      after an MX-record lookup; the `smtp_check` field reports the outcome.
+
+  - id: cors
+    conforms: true
+    evidence: >-
+      "The API also supports Access-Control (CORS) headers."
+      https://docs.apilayer.com/mailboxlayer/docs/getting-started
+
+  - id: jsonp
+    conforms: true
+    evidence: >-
+      `callback` query parameter wraps the JSON result in the named function.
+      Documented under "JSONP Callbacks".
+
+  - id: tls
+    conforms: true
+    evidence: >-
+      TLSv1.3 observed on both apilayer.net and mailboxlayer.com
+      (security/mailboxlayer-domain-security.yml). 256-bit HTTPS is advertised on all
+      plans on the pricing page.
+
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors use a vendor envelope (`success: false` + `error.{code,type,info}`), not
+      application/problem+json. See errors/mailboxlayer-problem-types.yml.
+
+  - id: http-status-semantics
+    conforms: false
+    evidence: >-
+      Service-level failures — invalid key, exhausted quota, unparseable address — are
+      returned with HTTP 200 and a `success:false` body, stated in the 200 response
+      description of both operations in the provider's own spec. A 200 is not evidence the
+      request succeeded.
+
+  - id: rfc6749-oauth2
+    conforms: false
+    evidence: No OAuth 2.0. Single apiKey scheme in the query string.
+
+  - id: oidc
+    conforms: false
+    evidence: >-
+      /.well-known/openid-configuration returns 404 on mailboxlayer.com, docs.apilayer.com
+      and apilayer.com, and a catch-all soft-200 error envelope on apilayer.net.
+      See well-known/mailboxlayer-well-known.yml.
+
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: false
+    evidence: /.well-known/oauth-authorization-server not served on any host.
+
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: >-
+      /.well-known/security.txt returns 404 on mailboxlayer.com, docs.apilayer.com and
+      apilayer.com. No vulnerability-disclosure contact is published anywhere.
+
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset or Deprecation header, and no deprecation policy. See lifecycle/.
+
+  - id: ratelimit-header-fields
+    conforms: false
+    evidence: >-
+      No X-RateLimit-*, no RateLimit-*, no Retry-After. Per-minute limits ARE published in
+      prose (Free 50, Basic 100, Professional 300, Enterprise 300) but are not signalled at
+      runtime. See rate-limits/mailboxlayer-rate-limits.yml.
+
+  - id: idempotency-key
+    conforms: false
+    not_applicable: true
+    evidence: >-
+      Read-only GET surface. Both operations are safe and idempotent by HTTP method; there
+      is no mutation to de-duplicate, so no idempotency-key contract is needed or offered.
+      NOT emitted as an `Idempotency` pointer — the dimension does not apply here.
+
+  - id: json-api
+    conforms: false
+    evidence: Plain JSON objects; no JSON:API document structure.
+
+  - id: pagination
+    conforms: false
+    not_applicable: true
+    evidence: >-
+      /check returns one object; /bulk_check returns one array bounded by the plan's batch
+      ceiling (25 or 100). There is no collection to page.
+
+  - id: asyncapi
+    conforms: false
+    not_applicable: true
+    evidence: >-
+      mailboxlayer has no event, webhook or streaming surface of any kind. Nothing in the
+      docs, the spec or the llms.txt describes one. No AsyncAPI artifact and no `Webhooks`
+      pointer is emitted, and the asyncapi scoring family should not be in this provider's
+      denominator.
+
+  - id: mcp
+    conforms: false
+    evidence: >-
+      No MCP server published by APILayer or mailboxlayer. See mcp/mailboxlayer-mcp.yml
+      for the probe record.
+
+  - id: a2a-agent-card
+    conforms: false
+    evidence: >-
+      /.well-known/agent-card.json and /.well-known/agent.json miss on every host. No a2a/
+      artifact is written — an agent card may only ever be recorded from a real provider
+      hit.
+
+compliance_program:
+  published: false
+  certifications: []
+  trust_center: null
+  evidence:
+    - {url: 'https://apilayer.com/security', status: 404}
+    - {url: 'https://apilayer.com/trust', status: 404}
+    - {url: 'https://trust.apilayer.com', status: 000, note: does not resolve}
+    - {url: 'https://mailboxlayer.com/security', status: 404}
+    - {url: 'https://mailboxlayer.com/trust', status: 404}
+    - {url: 'https://apilayer.com/.well-known/security.txt', status: 404}
+  note: >-
+    No SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP or GDPR compliance page is published for
+    mailboxlayer or for the APILayer parent brand. probe-security-programs.py returned
+    vdp=none, trust=none on 2026-08-14. Because there is no published compliance program,
+    NO `Compliance` and NO `TrustCenter` pointer is emitted — a `Conformance` artifact that
+    merely asserts standards must never be used to claim a certification the provider does
+    not hold.
+  data_protection_surface:
+    urls:
+      - https://mailboxlayer.com/privacy
+      - https://mailboxlayer.com/cookies
+      - https://mailboxlayer.com/terms
+      - https://mailboxlayer.com/service-agreement
+      - https://mailboxlayer.com/permitted-prohibited-use
+    note: >-
+      Legal/policy pages exist and return 200, but they are terms and privacy documents,
+      not a compliance or certification program.

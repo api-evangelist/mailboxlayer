@@ -1,0 +1,88 @@
+generated: '2026-08-14'
+method: derived
+status: candidate
+source: openapi/_original/mailboxlayer-swaggerhub-openapi.json
+description: >-
+  CANDIDATE tool surface derived from the OpenAPI that APILayer publishes for mailboxlayer.
+  Neither APILayer nor mailboxlayer ships an MCP server of any kind. Searched 2026-08-14:
+  no /mcp endpoint on any mailboxlayer or apilayer host, no @apilayer MCP package on npm,
+  no MCP server named in the docs portal, llms.txt or the parent APILayer llms.txt. Third
+  parties (Composio, Pipedream) expose mailboxlayer as a tool inside their own platforms;
+  those are their surfaces, not APILayer's, and are not recorded as a provider MCP server.
+
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: probed
+  note: >-
+    mode is `none` because nobody ships a server — this file is a derived candidate, not a
+    reachable agent surface. If APILayer ever ships one it will need the mailboxlayer
+    access_key, which today travels as a query parameter (see authentication/).
+
+probe_evidence:
+  - {url: 'https://mcp.apilayer.com/mcp', status: 404}
+  - {url: 'https://apilayer.com/mcp', status: 404}
+  - {url: 'https://api.apilayer.com/mcp', status: 404}
+  - {url: 'https://mcp.mailboxlayer.com', status: 000, note: does not resolve}
+  - {url: 'https://registry.npmjs.org/-/v1/search?text=apilayer%20mcp', status: 200, result: no first-party package}
+
+server:
+  name: mailboxlayer
+  transport: null
+  url: null
+
+tools:
+  - name: check_email
+    description: >-
+      Validate a single email address — syntax, MX records, real-time SMTP, catch-all,
+      role, disposable and free-provider detection, plus a 0.0-1.0 deliverability score.
+    source_operation: openapi/_original/mailboxlayer-swaggerhub-openapi.json#checkEmail
+    http: GET https://apilayer.net/api/check
+    input_schema_source: '#/paths/~1check/get/parameters'
+    inputs:
+      - {name: email, required: true, type: string, format: email}
+      - {name: smtp, required: false, type: integer, enum: [0, 1], default: 1}
+      - {name: catch_all, required: false, type: integer, enum: [0, 1], default: 0,
+         note: paid plans only; response field is null when not requested}
+      - {name: format, required: false, type: integer, enum: [0, 1]}
+      - {name: callback, required: false, type: string, note: JSONP wrapper}
+    auth: access_key query parameter
+    consequence: read
+
+  - name: bulk_check_emails
+    description: >-
+      Validate many email addresses in one call. Returns an array of results, one per
+      address. Professional Plus is capped at 25 addresses, Enterprise Plus at 100.
+    source_operation: openapi/_original/mailboxlayer-swaggerhub-openapi.json#bulkCheckEmails
+    http: GET https://apilayer.net/api/bulk_check
+    input_schema_source: '#/paths/~1bulk_check/get/parameters'
+    inputs:
+      - {name: emails, required: true, type: string, note: comma-separated address list}
+      - {name: smtp, required: false, type: integer, enum: [0, 1], default: 1}
+      - {name: catch_all, required: false, type: integer, enum: [0, 1], default: 0}
+      - {name: format, required: false, type: integer, enum: [0, 1]}
+      - {name: callback, required: false, type: string}
+    auth: access_key query parameter
+    consequence: read
+    plan_gated: true
+
+agent_hazards:
+  - id: success-is-not-http-status
+    description: >-
+      mailboxlayer returns service-level failures with HTTP 200 and a `success: false`
+      body. Any tool wrapper that branches on the status code will report an invalid key,
+      an exhausted quota, or an unparseable address as a successful verification. A tool
+      implementation MUST inspect `success` and `error.code`.
+    reference: errors/mailboxlayer-problem-types.yml
+  - id: key-in-query-string
+    description: >-
+      The access key is a query parameter, so it lands in proxy logs, browser history and
+      any agent trace that records request URLs. Redact `access_key` before logging.
+    reference: authentication/mailboxlayer-authentication.yml
+  - id: catch-all-defaults-null
+    description: >-
+      `catch_all` is null unless `catch_all=1` is passed AND the plan allows it. An agent
+      that reads null as false will mis-score catch-all domains.

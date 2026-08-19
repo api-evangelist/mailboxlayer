@@ -1,0 +1,119 @@
+generated: '2026-08-14'
+method: searched
+source: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+sources:
+  - https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - https://mailboxlayer.com/api-status
+  - https://docs.apilayer.com/changelog
+  - https://api.swaggerhub.com/apis/apilayer-863/MailboxlayerAPI/1.0.0/swagger.json
+description: >-
+  Lifecycle posture for the mailboxlayer Verification API. Searched 2026-08-14 across the
+  developer portal, the parent APILayer site and the APILayer changelog product. The result
+  is mostly absence, and the absences are the finding: mailboxlayer publishes a status page
+  but no versioning policy, no deprecation policy, no Sunset/Deprecation header support,
+  no SLA document and no dated changelog of its own.
+
+versioning:
+  scheme: none-in-path
+  current: null
+  spec_version: '1.0.0'
+  spec_version_source: >-
+    info.version of the OpenAPI APILayer publishes at
+    https://api.swaggerhub.com/apis/apilayer-863/MailboxlayerAPI/1.0.0/swagger.json
+  policy_url: null
+  header: null
+  note: >-
+    The base URL https://apilayer.net/api carries no version segment, no version query
+    parameter and no version header is documented. The only version identifier that exists
+    anywhere is the SwaggerHub document's own 1.0.0 label. There is no published statement
+    of what constitutes a breaking change, and therefore no contract about how one would be
+    communicated.
+
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No deprecation policy, no Sunset header, no Deprecation header. NOT wired as a
+    `Deprecation` pointer in apis.yml — there is nothing to point at.
+  historical_evidence: >-
+    APILayer has retired sibling products before (giflayer, languagelayer, pdflayer,
+    screenshotlayer and streetlayer all have archived repositories in the apilayer GitHub
+    organization) without any published deprecation or sunset process, so the absence here
+    is a live risk rather than a formality.
+
+deprecated_operations: []
+
+status_page:
+  url: https://mailboxlayer.com/api-status
+  title: 'API-Status | Real-Time APIs performance Insights'
+  http_status: 200
+  checked: '2026-08-14'
+  machine_readable: false
+  subscribe: false
+  incident_history: false
+  note: >-
+    A first-party status page rendered on mailboxlayer.com. It presents real-time
+    performance insight only — there is no incident feed, no RSS/JSON status endpoint, no
+    subscription mechanism, and no historical uptime record. An agent cannot consume it.
+  also_linked_from: https://mailboxlayer.com/product
+
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No SLA document is published. The Enterprise Plus tier is marketed with "richer SLAs"
+    and the optional annual Platinum Support add-on lists dedicated account management,
+    priority bug fixes, priority email support and quarterly briefing calls — but no
+    uptime target, credit schedule or response-time commitment is published anywhere
+    publicly reachable.
+  reference: plans/mailboxlayer-plans-pricing.yml
+
+changelog:
+  url: null
+  note: >-
+    APILayer runs a changelog product on its docs portal at
+    https://docs.apilayer.com/changelog, but 2026-08-14 it carries exactly one product
+    page — marketstack. https://docs.apilayer.com/changelog/docs/mailboxlayer returns 404.
+    No dated change history for mailboxlayer exists, so no changelog/ artifact and no
+    `ChangeLog` pointer is emitted.
+  evidence:
+    - {url: 'https://docs.apilayer.com/changelog', status: 200, note: only marketstack listed}
+    - {url: 'https://docs.apilayer.com/changelog/docs/mailboxlayer', status: 404}
+
+surface_history:
+  - date: '2026-03-23'
+    event: >-
+      Developer portal pages (api-documentation, quickstart-guide, code-examples,
+      api-validation-tools, playground) last modified, per Last-Modified response headers.
+    method: probed
+  - date: '2026-06-26'
+    event: Getting Started page last modified, per Last-Modified response header.
+    method: probed
+  - date: '2026-08-04'
+    event: >-
+      API Endpoints reference page last modified — the page that renders the SwaggerHub
+      OpenAPI. The most recently touched surface mailboxlayer publishes.
+    method: probed
+
+surface_history_note: >-
+  These are page modification timestamps observed on the SwaggerHub Portal, not provider
+  change announcements. They are recorded because they are the ONLY dated signal of
+  activity available for this API.
+
+support_lifecycle:
+  support_url: https://apilayer.com/support/
+  contact_url: https://mailboxlayer.com/contact
+  community: https://discord.com/invite/hgjA78638n
+  email: support@apilayer.com
+  note: >-
+    https://mailboxlayer.com/support — the URL previously recorded in apis.yml and still
+    carried in the OpenAPI's info.contact.url — returns HTTP 404 (checked 2026-08-14).
+    The working surfaces are the APILayer support page, the mailboxlayer contact form and
+    the APILayer Discord.
+
+pointers_emitted:
+  StatusPage: https://mailboxlayer.com/api-status
+  Deprecation: null
+  ChangeLog: null

@@ -1,0 +1,35 @@
+Website:
+https://mailboxlayer.com/	
+
+LLM.txt file
+# mailboxlayer.com llms.txt
+
+- [Mailboxlayer Signup](https://mailboxlayer.com/signup?plan=799&billing=yearly): Facilitates user registration and subscription to mailboxlayer's email verification API plans.
+- [Mailboxlayer Login](https://mailboxlayer.com/login?u=https%253A%252F%252Fmailboxlayer.com%252Fcontact): Allow users to log in and access their Mailboxlayer account dashboard.
+- [Contact Support](https://mailboxlayer.com/contact): Allow users to contact support for sales, billing, technical, product, or legal inquiries.
+- [Service Agreement](https://mailboxlayer.com/service-agreement): Defines terms and conditions for subscription services offered by mailboxlayer API.
+- [Mailboxlayer Pricing Plans](https://mailboxlayer.com/pricing): Display subscription plans and pricing for mailboxlayer API email validation services with detailed features and support options.
+- [Mailboxlayer API Signup](https://mailboxlayer.com/signup?plan=798): Signup page for choosing and subscribing to mailboxlayer email validation API plans.
+- [Mailboxlayer Login](https://mailboxlayer.com/dashboard): Allow users to log in and access their mailboxlayer account dashboard.
+- [Mailboxlayer Subscription Plans](https://mailboxlayer.com/product): Offer subscription plans and features for mailboxlayer email validation API services with pricing and support options.
+- [Password Reset Request](https://mailboxlayer.com/forgot): Allow users to request a password reset by submitting their registered email address.
+- [Mailboxlayer API Status](https://mailboxlayer.com/api-status): Display real-time performance metrics and status of Mailboxlayer email validation APIs.
+- [Terms of Use & API License](https://mailboxlayer.com/terms): To define the terms, conditions, and licensing agreement for using the mailboxlayer API services.
+- [Privacy Policy](https://mailboxlayer.com/privacy): Explain how user data is collected, processed, and protected according to privacy laws and user rights.
+- [Mailboxlayer API Signup](https://mailboxlayer.com/signup?plan=800&billing=yearly): Facilitates user registration and subscription purchase for mailboxlayer API plans with pricing and billing details.
+- [Mailboxlayer API Signup](https://mailboxlayer.com/signup?plan=1371&billing=yearly): Sign up and subscribe to mailboxlayer's email validation API plans with account and billing details.
+- [Permitted & Prohibited Uses](https://mailboxlayer.com/permitted-prohibited-use): Defines acceptable and forbidden uses of mailboxlayer.com services to ensure lawful and proper usage.
+- [Cookie Policy Overview](https://mailboxlayer.com/cookies): Explain mailboxlayer.com's cookie usage, types, purposes, user controls, and policy updates.
+- [Mailboxlayer API Overview](https://mailboxlayer.com/about): Provide information about mailboxlayer API for email validation, fraud prevention, and developer support.
+- [Mailboxlayer Signup Plans](https://mailboxlayer.com/signup?plan=800): Facilitates signup and subscription for Mailboxlayer's email validation API plans with billing details.
+- [Mailboxlayer Sitemap](https://mailboxlayer.com/sitemap.php): Provide a comprehensive sitemap for easy navigation of Mailboxlayer's website and services.
+- [Mailboxlayer Subscription Signup](https://mailboxlayer.com/signup?plan=799): Facilitates subscription sign-up and payment for mailboxlayer email verification API plans.
+- [Mailboxlayer Signup Page](https://mailboxlayer.com/signup?plan=798&billing=yearly): Facilitates user signup and subscription selection for mailboxlayer email validation API services.
+- [Mailboxlayer FAQ](https://mailboxlayer.com/faq): Provide detailed FAQs about mailboxlayer API's email validation features, usage, plans, and support options.
+- [Mailboxlayer Signup](https://mailboxlayer.com/signup?plan=1371): Facilitate user registration and subscription selection for mailboxlayer's email validation API service.
+- [Email Validation API](https://mailboxlayer.com): Provide an API for real-time email address validation and verification to improve deliverability and reduce bounce rates.
+- [Mailboxlayer Signup Page](https://mailboxlayer.com/signup?plan=797&billing=yearly): Sign up for mailboxlayer email validation API subscription plans with payment and account details.
+- [Mailboxlayer Login](https://mailboxlayer.com/login): Allow users to log in and access their Mailboxlayer account dashboard.
+- [Mailboxlayer API Documentation](https://mailboxlayer.com/documentation): Provide detailed documentation and usage instructions for the mailboxlayer email verification API.
+- [Mailboxlayer Account Login](https://mailboxlayer.com/payment): Enable users to log in and access their Mailboxlayer API account dashboard.
+- [Mailboxlayer API Signup](https://mailboxlayer.com/signup?plan=797): Sign up for mailboxlayer API subscription plans to validate and verify email addresses with various usage options.

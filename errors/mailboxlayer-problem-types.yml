@@ -1,0 +1,284 @@
+generated: '2026-08-14'
+method: searched
+source: https://docs.apilayer.com/mailboxlayer/docs/getting-started
+sources:
+  - https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  - https://api.swaggerhub.com/apis/apilayer-863/MailboxlayerAPI/1.0.0/swagger.json
+  - openapi/_original/mailboxlayer-swaggerhub-openapi.json
+description: >-
+  mailboxlayer error catalog, upgraded from derived to searched on 2026-08-14 against the
+  provider's own "API Error Codes" reference and the OpenAPI 3.1.0 APILayer publishes on
+  SwaggerHub. mailboxlayer does NOT use RFC 9457 problem+json. It carries failure in a
+  vendor envelope — `success: false` plus an `error` object with a numeric `code`, a
+  machine-readable `type`, and a human-readable `info` string.
+
+  Two transport layers exist and they must not be confused:
+
+    * SERVICE-LEVEL errors are returned with **HTTP 200** and the vendor envelope. The
+      provider's own spec says so in the 200 response description of both operations.
+      Clients and agents MUST inspect `success` / `error.code`, never the status code.
+    * The published spec ALSO declares real HTTP 401/403/404/422/429/500/503 responses,
+      each carrying either the same vendor envelope or, for 422, a FastAPI
+      request-validation body with a completely different shape.
+
+  The same numeric code therefore appears at more than one HTTP status (104 shows up as
+  both api_access_blocked/403 and usage_limit_reached/429), and one HTTP status carries
+  several types. Match on `error.type` first, `error.code` second; the HTTP status is the
+  least reliable of the three.
+format: vendor-envelope
+rfc9457: false
+
+envelope:
+  content_type: application/json
+  success_flag: success
+  error_object: error
+  fields:
+    - {name: code, type: integer, description: Numeric error code.}
+    - {name: type, type: string, description: Machine-readable error identifier.}
+    - {name: info, type: string, description: Human-readable description and suggested fix.}
+  example:
+    success: false
+    error:
+      code: 210
+      type: no_email_address_supplied
+      info: 'Please specify an email address. [Example: support@apilayer.com]'
+
+secondary_envelope:
+  name: RequestValidationError
+  http_status: 422
+  content_type: application/json
+  description: >-
+    FastAPI request-validation body, returned when a required query parameter is missing or
+    malformed. Completely different shape from the vendor envelope — there is no `success`
+    flag and no `error` object, so a client that only knows the vendor envelope will fail
+    to parse it.
+  schema: '#/components/schemas/RequestValidationError'
+  example:
+    detail:
+      - loc: [query, email]
+        msg: field required
+        type: value_error.missing
+
+problems:
+  - code: 101
+    type: missing_access_key
+    title: No API access key supplied
+    http_status: 401
+    category: authentication
+    message: 'You have not supplied an API Access Key. [Required format: access_key=YOUR_ACCESS_KEY]'
+    remediation: Attach `access_key=YOUR_ACCESS_KEY` to the request URL.
+    source_operation: openapi/_original/mailboxlayer-swaggerhub-openapi.json#checkEmail
+
+  - code: 101
+    type: invalid_access_key
+    title: Invalid API access key
+    http_status: 401
+    category: authentication
+    message: 'You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]'
+    remediation: Use a valid key from the APILayer dashboard at https://app.apilayer.com/.
+    source_operation: openapi/_original/mailboxlayer-swaggerhub-openapi.json#checkEmail
+
+  - code: 102
+    type: inactive_user
+    title: Account not active
+    http_status: 401
+    category: account
+    message: Permission denied - User not active.
+    remediation: Contact support@apilayer.com to reactivate the account.
+    note: >-
+      The older mailboxlayer error table and this repo's earlier derived catalog listed
+      inactive_user as code 106. The provider's current spec and docs both give 102, and
+      106 is now rate_limit_reached. Handle both defensively.
+
+  - code: 107
+    type: account_on_hold
+    title: Account on hold — unpaid invoices
+    http_status: 401
+    category: billing
+    message: >-
+      Your account currently has open invoices and API has been automatically disabled.
+      Please settle your open balance or downgrade to the Free Plan to restore API access.
+      [Support: support@apilayer.com]
+    remediation: Settle the outstanding balance or downgrade to the Free plan.
+
+  - code: 105
+    type: https_access_restricted
+    title: HTTPS not permitted on this plan
+    http_status: 403
+    category: plan
+    message: Access Restricted - Your current Subscription Plan does not support HTTPS Encryption.
+    remediation: >-
+      Upgrade the plan. NOTE the divergence: both the pricing page and the getting-started
+      docs now list 256-bit HTTPS as available on ALL plans including Free (checked
+      2026-08-14), yet this error remains in the published catalog.
+    reference: plans/mailboxlayer-plans-pricing.yml
+
+  - code: 105
+    type: function_access_restricted
+    title: API function not permitted on this plan
+    http_status: 403
+    category: plan
+    message: Access Restricted - Your current Subscription Plan does not support this API Function.
+    remediation: >-
+      The requested endpoint is above the plan tier. /bulk_check requires Professional Plus
+      or Enterprise Plus.
+
+  - code: 104
+    type: api_access_blocked
+    title: API access temporarily disabled
+    http_status: 403
+    category: account
+    message: >-
+      Your API access has been temporarily disabled. Please upgrade your Subscription Plan
+      or contact support.
+
+  - code: 103
+    type: invalid_api_function
+    title: Invalid API function
+    http_status: 404
+    category: request
+    message: This API Function does not exist.
+    remediation: Use /check or /bulk_check on https://apilayer.net/api.
+
+  - code: 404
+    type: 404_not_found
+    title: Resource not found
+    http_status: 404
+    category: request
+    message: 404 - The requested resource could not be found. Please try again or contact support.
+    note: The numeric code duplicates the HTTP status here; that is the provider's own convention.
+
+  - code: 210
+    type: no_email_address_supplied
+    title: No email address supplied
+    http_status: 200
+    category: validation
+    message: 'Please specify an email address. [Example: support@apilayer.com]'
+    remediation: Provide the required `email` query parameter to /check.
+    source_operation: openapi/_original/mailboxlayer-swaggerhub-openapi.json#checkEmail
+
+  - code: 211
+    type: format_not_valid
+    title: Invalid email address format
+    http_status: 200
+    category: validation
+    message: User has provided an email address with an invalid format.
+    remediation: >-
+      Validate the address shape client-side before submitting. Earlier mailboxlayer
+      documentation named this type `invalid_email_address`; the current error reference
+      names it `format_not_valid`. Match on the code (211) to survive the rename.
+
+  - code: 231
+    type: bulk_limit_exceeded
+    title: Bulk request exceeds plan limit
+    http_status: 200
+    category: plan
+    message: You have supplied more email addresses than your plan allows in a single bulk request.
+    remediation: >-
+      Chunk the request: 25 addresses per call on Professional Plus, 100 on Enterprise Plus.
+    source_operation: openapi/_original/mailboxlayer-swaggerhub-openapi.json#bulkCheckEmails
+
+  - code: 310
+    type: catch_all_access_restricted
+    title: Catch-all detection not permitted on this plan
+    http_status: 200
+    category: plan
+    message: The user's current subscription plan does not support catch-all detection.
+    remediation: Catch-all detection requires a paid plan. Omit `catch_all=1` on Free.
+
+  - code: 104
+    type: usage_limit_reached
+    title: Monthly usage limit reached
+    http_status: 429
+    category: quota
+    message: Your monthly usage limit has been reached. Please upgrade your Subscription Plan.
+    remediation: Wait for the monthly billing-anniversary reset or upgrade the plan.
+    reference: rate-limits/mailboxlayer-rate-limits.yml
+
+  - code: 104
+    type: daily_usage_limit_reached
+    title: Daily usage limit reached
+    http_status: 429
+    category: quota
+    message: >-
+      Your daily usage limit has been reached. Please try again tomorrow or upgrade your
+      subscription plan.
+    note: >-
+      A DAILY cap exists in addition to the monthly allowance. No daily figure is published
+      on the pricing page — the only signal an integrator gets is this error.
+
+  - code: 104
+    type: fair_use_limit_reached
+    title: Fair-use limit reached
+    http_status: 429
+    category: quota
+    message: 'Your fair use limit has been reached. [Please contact support: support@apilayer.com]'
+    note: >-
+      An unpublished fair-use ceiling sits above the plan allowance. Its threshold is not
+      documented anywhere, so it cannot be planned for — only handled.
+
+  - code: 106
+    type: rate_limit_reached
+    title: Per-minute rate limit exceeded
+    http_status: 429
+    category: rate-limit
+    message: >-
+      You have exceeded the maximum rate limitation allowed on your subscription plan.
+      Please refer to the "Rate Limits" section of the API Documentation for details.
+    remediation: >-
+      Back off and retry. Published per-minute ceilings: Free 50, Basic 100, Professional
+      300, Enterprise 300. The provider recommends staying under 5 requests/second.
+    reference: rate-limits/mailboxlayer-rate-limits.yml
+
+  - code: 0
+    type: internal_error
+    title: Internal server error
+    http_status: 500
+    category: server
+    message: 'An error has occured. [Technical Support: support@apilayer.com]'
+    remediation: Retry with backoff; the operation is a safe GET so retry is free.
+
+  - code: 503
+    type: maintenance_mode
+    title: Service unavailable — maintenance
+    http_status: 503
+    category: server
+    message: ''
+    note: The provider's own example ships an empty `info` string for this error.
+    remediation: Retry after a delay.
+
+  - code: 999
+    type: timeout
+    title: Unexpected timeout
+    http_status: 200
+    category: server
+    message: An unexpected timeout issue occurred.
+    remediation: >-
+      Retry. Setting `smtp=0` removes the real-time SMTP conversation, which is the slowest
+      part of a verification and the usual cause of a timeout.
+
+  - code: null
+    type: request_validation_error
+    title: Request validation error
+    http_status: 422
+    category: validation
+    envelope: RequestValidationError
+    message: 'detail[].msg — e.g. "field required" for loc ["query","email"]'
+    remediation: >-
+      Supply the required query parameter (`email` for /check, `emails` for /bulk_check).
+      This response does NOT carry the vendor envelope; parse `detail[]` instead.
+
+notes:
+  - >-
+    UPGRADE 2026-08-14: this catalog was previously derived from a thin refined spec and
+    listed 7 codes, all at HTTP 200. The provider's published contract and error reference
+    document 20 distinct type/status combinations across 7 HTTP statuses, including a
+    daily cap, an undocumented fair-use ceiling, a per-minute rate limit, a billing hold,
+    a bulk-size ceiling and a second, incompatible error envelope at 422.
+  - >-
+    The "silent success" hazard remains the headline risk: service-level failures are
+    still returned with HTTP 200, so a 200 is not evidence the verification ran.
+  - >-
+    Numeric codes are NOT unique. 101 covers both missing and invalid keys; 104 covers
+    monthly, daily and fair-use exhaustion plus a blocked account; 105 covers both HTTPS
+    and function restriction. Branch on `error.type`.

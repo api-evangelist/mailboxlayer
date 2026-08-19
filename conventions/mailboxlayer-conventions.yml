@@ -1,0 +1,186 @@
+generated: '2026-08-14'
+method: searched
+source: https://docs.apilayer.com/mailboxlayer/docs/getting-started
+sources:
+  - https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  - https://docs.apilayer.com/mailboxlayer/docs/api-validation-tools
+  - openapi/_original/mailboxlayer-swaggerhub-openapi.json
+description: >-
+  Cross-cutting request/response semantics for the mailboxlayer Verification API, upgraded
+  from derived to searched on 2026-08-14 against the provider's own documentation and the
+  OpenAPI 3.1.0 APILayer publishes on SwaggerHub. mailboxlayer is a two-operation,
+  read-only lookup API: there is no mutation surface, therefore no idempotency contract,
+  no pagination, and no expansion/sparse-fieldset model.
+
+operations:
+  - {operationId: checkEmail, method: GET, path: /check, availability: all plans}
+  - {operationId: bulkCheckEmails, method: GET, path: /bulk_check,
+     availability: Professional Plus and Enterprise Plus only}
+
+authentication:
+  style: api-key
+  location: query
+  parameter: access_key
+  required: true
+  transport_note: >-
+    256-bit HTTPS is advertised on ALL plans including Free on both
+    https://mailboxlayer.com/product and the Getting Started docs (checked 2026-08-14).
+    Error 105 (https_access_restricted) nonetheless remains in the published error catalog,
+    so plan-level HTTPS restriction cannot be ruled out entirely.
+  hazard: >-
+    The key travels in the query string, so it is written to proxy logs, browser history,
+    referrer headers and any agent trace that records request URLs. Redact `access_key`
+    before logging. This is a property of the API, not of the client.
+  reference: authentication/mailboxlayer-authentication.yml
+
+idempotency:
+  supported: false
+  applicable: false
+  reason: >-
+    Both operations are GET — safe and idempotent by HTTP method. No idempotency-key header
+    or parameter is documented, and none is needed: there is no write operation to
+    de-duplicate. Retrying a failed call is free and correct.
+  header: null
+  pointer_emitted: false
+  pointer_note: >-
+    No `Idempotency` pointer is emitted in apis.yml. The agent-readiness idempotency
+    dimension exists to reward a de-duplication contract on a mutating API; asserting one
+    here would claim a contract that has nothing to protect.
+
+pagination:
+  supported: false
+  reason: >-
+    /check returns a single object. /bulk_check returns an array bounded by the plan's
+    batch ceiling (25 on Professional Plus, 100 on Enterprise Plus) — the caller controls
+    the size by how many addresses they submit. There is no cursor, offset, or next link.
+  batching:
+    endpoint: /bulk_check
+    parameter: emails
+    encoding: comma-separated string in the query
+    max_per_request: {professional-plus: 25, enterprise-plus: 100}
+    exceeded_error: {code: 231, type: bulk_limit_exceeded}
+    billing: >-
+      One bulk call counts as ONE billable request regardless of address count — the
+      cheapest way to stay inside both the per-minute rate limit and the monthly allowance.
+
+filtering_and_shaping:
+  expansion: null
+  sparse_fieldsets: null
+  parameters:
+    - name: smtp
+      values: [0, 1]
+      default: 1
+      description: >-
+        Set to 0 to skip the real-time SMTP conversation. Trades accuracy for latency and
+        removes the `smtp_check` verdict. The SMTP step is the slowest part of a
+        verification and the usual cause of error 999 (timeout).
+    - name: catch_all
+      values: [0, 1]
+      default: 0
+      description: >-
+        Enables catch-all mailbox detection. OFF by default because it is heavier and
+        increases response time. When not requested, the `catch_all` response field is
+        null — NOT false. Paid plans only; Free returns error 310.
+    - name: format
+      values: [0, 1]
+      default: 0
+      description: >-
+        Set to 1 for prettified JSON. The provider states this increases payload size and
+        recommends it for debugging only.
+    - name: callback
+      description: JSONP callback function name; wraps the JSON response in a function call.
+
+metadata:
+  supported: false
+
+request_tracing:
+  request_id_header: null
+  correlation_id: null
+  note: >-
+    No request-id, trace-id or correlation header is documented on the request or the
+    response. There is no handle by which a caller can reference a specific verification
+    when contacting support, and no way for an agent to correlate a response with the call
+    that produced it other than by local bookkeeping.
+
+versioning:
+  scheme: none-in-path
+  current: null
+  note: >-
+    The base URL https://apilayer.net/api carries no version segment and no version header
+    is documented. The only version identifier anywhere is the SwaggerHub document's own
+    info.version of 1.0.0. See lifecycle/mailboxlayer-lifecycle.yml.
+
+error_envelope:
+  style: vendor-envelope
+  http_status_on_service_error: 200
+  shape:
+    success: false
+    error: {code: 0, type: string, info: string}
+  secondary_envelope:
+    name: RequestValidationError
+    http_status: 422
+    shape: {detail: [{loc: [string], msg: string, type: string}]}
+    note: >-
+      A second, structurally incompatible error shape. It has no `success` flag and no
+      `error` object, so a client written only against the vendor envelope will fail to
+      parse a 422.
+  critical_note: >-
+    Failures are returned with HTTP 200. Any client — human or agent — that branches on the
+    HTTP status alone will treat an invalid key, an exhausted quota, a plan restriction or
+    an unparseable address as a successful verification. Always branch on the `success`
+    flag and `error.code`, and remember the numeric codes are not unique (101 = missing OR
+    invalid key; 104 = monthly OR daily OR fair-use exhaustion OR blocked account; 105 =
+    HTTPS OR function restriction). Match on `error.type` first.
+  reference: errors/mailboxlayer-problem-types.yml
+
+rate_limit_signaling:
+  response_headers: []
+  retry_after: false
+  published_limits:
+    per_minute_by_plan: {free: 50, basic: 100, professional: 300, enterprise: 300}
+    recommended_max_rps: 5
+    source: https://docs.apilayer.com/mailboxlayer/docs/getting-started
+  note: >-
+    Per-minute limits ARE published in prose but are not signalled at runtime. No
+    X-RateLimit-*, no RateLimit-*, no Retry-After. An agent cannot read remaining budget
+    and is not told how long to wait after a 429; a client-side token bucket set to the
+    plan's per-minute figure plus exponential backoff is the only workable strategy.
+    Exhaustion surfaces as error 106 (per-minute) or 104 (monthly / daily / fair-use).
+  reference: rate-limits/mailboxlayer-rate-limits.yml
+
+content_negotiation:
+  request: query-string only (GET); no request body on either operation
+  response: application/json, or JSONP when `callback` is supplied
+  cors:
+    supported: true
+    source: https://docs.apilayer.com/mailboxlayer/docs/getting-started
+    quote: 'Note: The API also supports Access-Control (CORS) headers.'
+
+response_semantics:
+  tri_state_fields:
+    - field: catch_all
+      values: [true, false, 'null']
+      note: >-
+        null means the check did not run — either `catch_all=1` was not sent, or the plan
+        does not permit it. Reading null as false is a silent misclassification.
+  advisory_fields:
+    - field: did_you_mean
+      note: >-
+        A suggestion only. The provider states explicitly that it "does not have any impact
+        on other API response objects" — the other fields describe the address as submitted,
+        not the suggestion.
+  score:
+    range: 0.0-1.0
+    note: >-
+      No banding is published. The quickstart cites 0.8 as "generally considered
+      high-quality and deliverable", which is the only threshold guidance the provider
+      gives; any cutoff an integrator adopts is their own policy.
+
+cross_links:
+  authentication: authentication/mailboxlayer-authentication.yml
+  errors: errors/mailboxlayer-problem-types.yml
+  rate_limits: rate-limits/mailboxlayer-rate-limits.yml
+  plans: plans/mailboxlayer-plans-pricing.yml
+  lifecycle: lifecycle/mailboxlayer-lifecycle.yml
+  data_model: data-model/mailboxlayer-data-model.yml
+  sandbox: sandbox/mailboxlayer-sandbox.yml

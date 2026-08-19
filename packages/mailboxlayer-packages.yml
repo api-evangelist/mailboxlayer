@@ -1,0 +1,137 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  npm registry (registry.npmjs.org), PyPI (pypi.org), RubyGems (rubygems.org),
+  Packagist (repo.packagist.org) and the apilayer GitHub organization
+  (api.github.com/orgs/apilayer/repos), queried 2026-08-14.
+description: >-
+  Client libraries for the mailboxlayer Verification API. APILayer publishes NO
+  currently-maintained first-party SDK: the only first-party packages on any registry
+  are @apilayer/mailboxlayer (npm, last published 2019-10-01, single version 0.1.6)
+  and email-address-validation (npm, last published 2016-02-10), and the matching
+  GitHub repositories — apilayer/mailboxlayer-API and apilayer/email-address-validation —
+  are both ARCHIVED. Everything else in this file is community-maintained. The docs
+  themselves ship only inline PHP-cURL and jQuery.ajax snippets rather than an SDK.
+
+summary:
+  official_count: 2
+  official_maintained_count: 0
+  community_count: 6
+  registries_checked: [npm, pypi, rubygems, packagist, github]
+  registries_with_no_result: [pypi]
+  note: >-
+    A first-party SDK whose last release predates the API it wraps is an abandonment
+    signal. The mailboxlayer OpenAPI published on SwaggerHub in 2026 documents a
+    /bulk_check endpoint and a catch_all parameter that the 2019 npm package cannot
+    have covered.
+
+packages:
+  # ---- first-party (apilayer) ----
+  - language: javascript
+    registry: npm
+    name: '@apilayer/mailboxlayer'
+    url: https://www.npmjs.com/package/@apilayer/mailboxlayer
+    install: npm install @apilayer/mailboxlayer
+    official: true
+    version: 0.1.6
+    published: '2019-10-01'
+    maintained: false
+    note: >-
+      Only version ever published (0.1.6, 2019-10-01); registry metadata last modified
+      2022-04-04. No repository or homepage declared in the package manifest.
+
+  - language: javascript
+    registry: npm
+    name: email-address-validation
+    url: https://www.npmjs.com/package/email-address-validation
+    install: npm install email-address-validation
+    official: true
+    version: 0.2.1
+    published: '2016-02-10'
+    maintained: false
+    repository: https://github.com/apilayer/email-address-validation
+    note: >-
+      Published from the apilayer GitHub organization; the source repository is archived.
+      Predates the current API surface by a decade.
+
+  # ---- community ----
+  - language: typescript
+    registry: npm
+    name: mailboxlayer-node-client
+    url: https://www.npmjs.com/package/mailboxlayer-node-client
+    install: npm install mailboxlayer-node-client
+    official: false
+    version: 1.0.13
+    published: '2021-05-15'
+    repository: https://github.com/damienmarchandfr/mailboxlayer-node-client
+    note: Community Node/TypeScript client, already linked from apis.yml as an SDK.
+
+  - language: ruby
+    registry: rubygems
+    name: mailboxlayer
+    url: https://rubygems.org/gems/mailboxlayer
+    install: gem install mailboxlayer
+    official: false
+    version: 1.1.0
+    published: '2018-06-02'
+    repository: https://github.com/actfong/mailboxlayer
+    note: Community Ruby wrapper.
+
+  - language: php
+    registry: packagist
+    name: ashallendesign/laravel-mailboxlayer
+    url: https://packagist.org/packages/ashallendesign/laravel-mailboxlayer
+    install: composer require ashallendesign/laravel-mailboxlayer
+    official: false
+    version: v1.0.1
+    published: '2020-12-31'
+    repository: https://github.com/ash-jc-allen/laravel-mailboxlayer
+    note: Community Laravel wrapper.
+
+  - language: php
+    registry: packagist
+    name: ylly/mailboxlayerbundle
+    url: https://packagist.org/packages/ylly/mailboxlayerbundle
+    install: composer require ylly/mailboxlayerbundle
+    official: false
+    version: 1.0.1
+    published: '2018-09-27'
+    repository: https://github.com/ylly/mailboxlayerbundle
+    note: Community Symfony bundle.
+
+  - language: javascript
+    registry: npm
+    name: '@posthog/mailboxlayer-plugin'
+    url: https://www.npmjs.com/package/@posthog/mailboxlayer-plugin
+    install: npm install @posthog/mailboxlayer-plugin
+    official: false
+    version: 0.0.7
+    published: '2022-10-28'
+    repository: https://github.com/PostHog/mailboxlayer-plugin
+    note: >-
+      Integration, not a general-purpose SDK — scores PostHog user emails through the
+      mailboxlayer API. Published by PostHog, not APILayer.
+
+  - language: javascript
+    registry: npm
+    name: '@pipedream/mailboxlayer'
+    url: https://www.npmjs.com/package/@pipedream/mailboxlayer
+    install: npm install @pipedream/mailboxlayer
+    official: false
+    version: 0.0.1
+    published: '2025-01-11'
+    note: Pipedream connector components; third-party platform integration.
+
+absent:
+  - registry: pypi
+    queried: [mailboxlayer, mailboxlayer-python]
+    result: 404
+    note: No mailboxlayer package of any kind is published on PyPI.
+  - registry: maven-central
+    result: not-found
+  - registry: nuget
+    result: not-found
+  - registry: crates.io
+    result: not-found
+  - registry: pkg.go.dev
+    result: not-found

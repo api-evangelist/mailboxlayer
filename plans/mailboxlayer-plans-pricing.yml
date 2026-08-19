@@ -1,10 +1,17 @@
 apiCommonsPlans: "0.1"
+generated: '2026-08-14'
+method: searched
+source: https://mailboxlayer.com/product
+sources:
+  - https://mailboxlayer.com/product
+  - https://docs.apilayer.com/mailboxlayer/docs/getting-started
+plan_count: 5
 provider:
   id: mailboxlayer
   name: mailboxlayer
   url: https://mailboxlayer.com
   parent: apilayer
-modified: '2026-05-30'
+modified: '2026-08-14'
 billingModel:
   type: subscription
   cycle: monthly
@@ -34,9 +41,18 @@ plans:
       - real-time-smtp-check
       - mx-records-check
     transport:
-      https: false
+      https: true
+      note: >-
+        CORRECTED 2026-08-14. The Free plan feature list on https://mailboxlayer.com/product
+        now includes "256-bit HTTPS Encryption", and the Getting Started documentation lists
+        HTTPS as available on all plans. This file previously recorded https: false for Free.
+        Error 105 (https_access_restricted) nevertheless remains in the published error
+        catalog, so a plan-level HTTPS restriction cannot be fully ruled out.
     support: none
-    notes: Free tier. HTTP only; no support; no catch-all detection; no bulk endpoint.
+    rateLimit: 50 requests/minute
+    notes: >-
+      Free tier. 100 requests/month, hard-capped with no overage. No support, no catch-all
+      detection, no bulk endpoint.
 
   - id: basic
     name: Basic
@@ -64,6 +80,8 @@ plans:
     transport:
       https: true
     support: standard
+    rateLimit: 100 requests/minute
+    notes: Catch-all detection unlocks here. Still no bulk endpoint.
 
   - id: professional-plus
     name: Professional Plus
@@ -92,6 +110,10 @@ plans:
     transport:
       https: true
     support: standard
+    rateLimit: 300 requests/minute
+    notes: >-
+      First tier with /bulk_check access, capped at 25 addresses per call. One bulk call is
+      one billable request regardless of address count.
 
   - id: enterprise-plus
     name: Enterprise Plus
@@ -120,6 +142,10 @@ plans:
     transport:
       https: true
     support: standard
+    rateLimit: 300 requests/minute
+    notes: >-
+      Same per-minute throughput ceiling as Professional Plus (300/min). The upgrade buys
+      monthly volume and a larger bulk batch, not more throughput.
 
   - id: custom
     name: Custom / Unlimited
@@ -147,3 +173,23 @@ addOns:
       - priority-email-support
       - quarterly-briefing-calls
       - feature-request-prioritization
+
+undisclosed:
+  - id: daily-cap
+    note: >-
+      A daily request cap exists in addition to the monthly allowance — evidenced by error
+      104 / daily_usage_limit_reached — but no figure is published on any plan.
+  - id: fair-use-ceiling
+    note: >-
+      An unpublished fair-use ceiling sits above the plan allowance — evidenced by error
+      104 / fair_use_limit_reached.
+
+undisclosed_reference: rate-limits/mailboxlayer-rate-limits.yml
+
+signup:
+  url: https://mailboxlayer.com/product
+  alternate: https://app.apilayer.com/signup
+  credit_card_required: false
+  note: >-
+    Self-serve. One APILayer account and one access key cover every APILayer product, so a
+    mailboxlayer subscription is billed on the same account as any sibling API.

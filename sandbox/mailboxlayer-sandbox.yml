@@ -1,0 +1,104 @@
+generated: '2026-08-14'
+method: searched
+source: https://docs.apilayer.com/mailboxlayer/docs/playground
+sources:
+  - https://docs.apilayer.com/mailboxlayer/docs/playground
+  - https://apilayer.com/playground/
+  - https://docs.apilayer.com/mailboxlayer/docs/quickstart-guide
+description: >-
+  mailboxlayer's try-before-you-integrate surface. Recorded honestly: what APILayer ships
+  is an interactive API CONSOLE, not a sandbox environment. There is no test mode, no test
+  key prefix, no fixture data and no way to exercise the API without consuming real quota
+  against a real key.
+
+type: console
+test_environment: false
+
+surfaces:
+  - id: apilayer-playground
+    name: APILayer Developers Playground
+    url: https://apilayer.com/playground/
+    docs_url: https://docs.apilayer.com/mailboxlayer/docs/playground
+    http_status: 200
+    checked: '2026-08-14'
+    description: >-
+      "The APILayer Developers Playground lets you test APIs instantly from your browser.
+      Instead of writing code or setting up a local environment, you can send requests,
+      modify parameters, and see real responses in real time."
+    scope: marketplace-wide (all APILayer products, not mailboxlayer-specific)
+    auth_required: true
+    note: Calls go to the live API with a live key and consume real plan quota.
+
+  - id: portal-try-it
+    name: SwaggerHub Portal API Endpoints view
+    url: https://docs.apilayer.com/mailboxlayer/docs/mailboxlayer-api-v-1-0-0
+    http_status: 200
+    checked: '2026-08-14'
+    description: >-
+      The rendered OpenAPI reference on the docs portal, generated from the published
+      SwaggerHub 3.1.0 document. Exposes both operations (checkEmail, bulkCheckEmails)
+      with their parameters and response examples.
+    auth_required: true
+
+  - id: free-plan-as-trial
+    name: Free plan
+    url: https://mailboxlayer.com/product
+    description: >-
+      The nearest thing to a sandbox: a permanently free tier of 100 requests/month against
+      the production API. No credit card required. This is the mechanism the quickstart
+      points at ("get a Free Plan and don't forget to attach your Access Key to the URL").
+    quota: 100 requests/month
+    limitations:
+      - No catch-all detection (error 310, catch_all_access_restricted).
+      - No /bulk_check (error 105, function_access_restricted).
+      - No support.
+    reference: plans/mailboxlayer-plans-pricing.yml
+
+test_mode:
+  supported: false
+  key_prefixes: []
+  note: >-
+    APILayer issues ONE access key per account. There is no test/live separation, no key
+    prefix distinguishing modes, and no way to tell from a key which environment it targets.
+
+test_values:
+  published: false
+  note: >-
+    No magic test addresses, no fixture domains, no deterministic sample results are
+    published. The documentation's worked examples use REAL addresses on real domains
+    (support@apilayer.com, support@mailboxlayer.com, user@gnail.com for the typo case),
+    which return live results that change with the state of those mailboxes — so they are
+    illustrations, not fixtures, and are deliberately not recorded here as test data.
+
+time_simulation:
+  supported: false
+
+fixtures_and_triggers:
+  supported: false
+  note: >-
+    There is no way to force a specific verdict (a bounce, a catch-all domain, a disposable
+    provider) for testing. An integrator wanting to exercise the disposable branch must
+    find a live disposable domain themselves.
+
+worked_examples:
+  - name: single verification
+    request: 'https://apilayer.net/api/check?access_key=YOUR_ACCESS_KEY&email=support@apilayer.com'
+    source: https://docs.apilayer.com/mailboxlayer/docs/quickstart-guide
+  - name: catch-all detection enabled
+    request: 'https://apilayer.net/api/check?access_key=YOUR_ACCESS_KEY&email=support@apilayer.com&catch_all=1'
+    source: https://docs.apilayer.com/mailboxlayer/docs/api-validation-tools
+  - name: bulk verification
+    request: 'https://apilayer.net/api/bulk_check?access_key=YOUR_ACCESS_KEY&emails=user1@domain.com,user2@gmail.com'
+    source: https://docs.apilayer.com/mailboxlayer/docs/quickstart-guide
+
+worked_examples_note: >-
+  YOUR_ACCESS_KEY is the provider's own placeholder, reproduced verbatim. No real key
+  appears in any published example.
+
+code_examples:
+  url: https://docs.apilayer.com/mailboxlayer/docs/code-examples
+  languages: [php-curl, javascript-jquery-ajax]
+  note: >-
+    Two inline snippets only. Both currently point at the /bulk_check endpoint while
+    passing the singular `email` parameter — a defect in the provider's own examples, since
+    /bulk_check requires `emails` and is gated to Professional Plus and above.
