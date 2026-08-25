@@ -1,0 +1,11 @@
+{
+  "repo": "mailboxlayer",
+  "feeds": [
+    {
+      "source": "https://docs.apilayer.com/mailboxlayer/docs/mailboxlayer-api-v-1-0-0",
+      "error": "HTTPError"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-22T20:20:02Z"
+}
