@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: mailboxlayer Verification API
   description: 'The mailboxlayer API is a simple REST-based JSON API for thorough email address
@@ -145,18 +145,63 @@ paths:
                       info: The email address supplied for the email parameter is invalid.
 components:
   schemas:
-    ErrorResponse:
+    CheckResult:
       type: object
-      description: Error response wrapper returned on a failed request.
+      description: Successful email verification result.
       properties:
-        success:
+        email:
+          type: string
+          format: email
+          description: The email address submitted for verification.
+        did_you_mean:
+          type: string
+          description: Suggested email address if a typo was detected, otherwise an empty string.
+        user:
+          type: string
+          description: The local part (user) of the submitted email address.
+        domain:
+          type: string
+          description: The domain part of the submitted email address.
+        format_valid:
           type: boolean
-          example: false
-        error:
-          $ref: '#/components/schemas/ApiError'
+          description: Whether the email address has a valid syntax.
+        mx_found:
+          type: boolean
+          description: Whether MX records exist for the domain.
+        smtp_check:
+          type: boolean
+          description: Whether the SMTP check succeeded (mailbox exists / SMTP server accepts the address).
+        catch_all:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the domain is configured as catch-all. Available on paid plans.
+        role:
+          type: boolean
+          description: Whether the address is a role-based address (e.g., `support@`, `admin@`).
+        disposable:
+          type: boolean
+          description: Whether the domain belongs to a disposable email provider (e.g., `mailinator.com`).
+        free:
+          type: boolean
+          description: Whether the domain belongs to a free email provider (e.g., `gmail.com`, `yahoo.com`).
+        score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Numeric quality score reflecting overall deliverability and quality (0.0 - 1.0).
       required:
-      - success
-      - error
+      - email
+      - user
+      - domain
+      - format_valid
+      - mx_found
+      - smtp_check
+      - role
+      - disposable
+      - free
+      - score
     ApiError:
       type: object
       properties:
@@ -189,62 +234,18 @@ components:
       - code
       - type
       - info
-    CheckResult:
+    ErrorResponse:
       type: object
-      description: Successful email verification result.
+      description: Error response wrapper returned on a failed request.
       properties:
-        email:
-          type: string
-          format: email
-          description: The email address submitted for verification.
-        did_you_mean:
-          type: string
-          description: Suggested email address if a typo was detected, otherwise an empty string.
-        user:
-          type: string
-          description: The local part (user) of the submitted email address.
-        domain:
-          type: string
-          description: The domain part of the submitted email address.
-        format_valid:
+        success:
           type: boolean
-          description: Whether the email address has a valid syntax.
-        mx_found:
-          type: boolean
-          description: Whether MX records exist for the domain.
-        smtp_check:
-          type: boolean
-          description: Whether the SMTP check succeeded (mailbox exists / SMTP server accepts the address).
-        catch_all:
-          type: boolean
-          nullable: true
-          description: Whether the domain is configured as catch-all. Available on paid plans.
-        role:
-          type: boolean
-          description: Whether the address is a role-based address (e.g., `support@`, `admin@`).
-        disposable:
-          type: boolean
-          description: Whether the domain belongs to a disposable email provider (e.g., `mailinator.com`).
-        free:
-          type: boolean
-          description: Whether the domain belongs to a free email provider (e.g., `gmail.com`, `yahoo.com`).
-        score:
-          type: number
-          format: float
-          minimum: 0
-          maximum: 1
-          description: Numeric quality score reflecting overall deliverability and quality (0.0 - 1.0).
+          example: false
+        error:
+          $ref: '#/components/schemas/ApiError'
       required:
-      - email
-      - user
-      - domain
-      - format_valid
-      - mx_found
-      - smtp_check
-      - role
-      - disposable
-      - free
-      - score
+      - success
+      - error
   securitySchemes:
     AccessKeyAuth:
       type: apiKey

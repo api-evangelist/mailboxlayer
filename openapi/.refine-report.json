@@ -1,14 +1,27 @@
 {
   "provider": "mailboxlayer",
   "sources": [
-    "mailboxlayer-verification-api-openapi.yml"
+    "_original/mailboxlayer-openapi.yml",
+    "_original/mailboxlayer-swaggerhub-openapi.json"
   ],
   "outputs": [
-    "mailboxlayer-verification-api-openapi.yml"
+    "mailboxlayer-verification-api-openapi.yml",
+    "mailboxlayer-bulk-check-api-openapi.yml",
+    "mailboxlayer-check-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "mailboxlayer-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "mailboxlayer-swaggerhub-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "mailboxlayer-swaggerhub-openapi.json: tagged paths GET /check -> Check",
+    "mailboxlayer-swaggerhub-openapi.json: tagged paths GET /bulk_check -> Bulk Check",
+    "mailboxlayer-swaggerhub-openapi.json: declared missing tag: Bulk Check",
+    "mailboxlayer-swaggerhub-openapi.json: declared missing tag: Check"
+  ],
+  "skipped": [
+    "mailboxlayer-verification-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

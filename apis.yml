@@ -79,78 +79,98 @@ tags_raw:
   - Developer Tools
   - Security
 apis:
-  - aid: mailboxlayer:mailboxlayer-verification-api
-    name: mailboxlayer Verification API
-    description: Email address validation and verification operations.
-    humanURL: https://mailboxlayer.com
-    baseURL: https://apilayer.net/api
-    tags:
-      - Verification
-    properties:
-      - type: OpenAPI
-        url: openapi/mailboxlayer-verification-api-openapi.yml
-      - type: Documentation
-        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
-      - type: APIReference
-        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
-      - type: GettingStarted
-        url: https://mailboxlayer.com/quickstart
-      - type: Authentication
-        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
-      - type: JSONSchema
-        url: json-schema/mailboxlayer-check-result-schema.json
-      - type: JSONSchema
-        url: json-schema/mailboxlayer-error-schema.json
-      - type: JSONStructure
-        url: json-structure/mailboxlayer-check-result-structure.json
-      - type: JSONLD
-        url: json-ld/mailboxlayer-context.jsonld
-      - type: Examples
-        url: examples/mailboxlayer-check-success-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-typo-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-disposable-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-error-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-result-example.json
-      - type: Examples
-        url: examples/mailboxlayer-check-result-free-example.json
-      - type: RateLimits
-        url: rate-limits/mailboxlayer-rate-limits.yml
-      - type: OpenAPI
-        name: mailboxlayer API (provider-published, SwaggerHub OpenAPI 3.1.0)
-        url: openapi/_original/mailboxlayer-swaggerhub-openapi.json
-      - type: Overlay
-        url: overlays/mailboxlayer-verification-api-overlay.yaml
-      - type: Conventions
-        url: conventions/mailboxlayer-conventions.yml
-      - type: ErrorCatalog
-        url: errors/mailboxlayer-problem-types.yml
-      - type: DataModel
-        url: data-model/mailboxlayer-data-model.yml
-  - name: Mailboxlayer Email Validation API
-    description: >-
-      REST/JSON API for real-time email validation: syntax check, typo suggestions, MX-record lookup, SMTP verification,
-      catch-all/role/disposable/free detection, and quality score. Available via legacy apilayer.net endpoint
-      (access_key query param) and APILayer marketplace endpoint (apikey header).
-    humanURL: https://mailboxlayer.com/documentation
-    baseURL: https://apilayer.net/api/check
-    tags:
-      - Email Validation
-      - Email Verification
-      - Data Quality
-      - Anti-Fraud
-      - Deliverability
-      - Communications
-      - Developer Tools
-      - Security
-    properties:
-      - type: Documentation
-        url: https://mailboxlayer.com/documentation
-      - type: Documentation
-        url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+- aid: mailboxlayer:mailboxlayer-verification-api
+  name: mailboxlayer Verification API
+  description: Email address validation and verification operations.
+  humanURL: https://mailboxlayer.com
+  baseURL: https://apilayer.net/api
+  tags:
+  - Verification
+  properties:
+  - type: OpenAPI
+    url: openapi/mailboxlayer-verification-api-openapi.yml
+  - type: Documentation
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - type: APIReference
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - type: GettingStarted
+    url: https://mailboxlayer.com/quickstart
+  - type: Authentication
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+  - type: JSONSchema
+    url: json-schema/mailboxlayer-check-result-schema.json
+  - type: JSONSchema
+    url: json-schema/mailboxlayer-error-schema.json
+  - type: JSONStructure
+    url: json-structure/mailboxlayer-check-result-structure.json
+  - type: JSONLD
+    url: json-ld/mailboxlayer-context.jsonld
+  - type: Examples
+    url: examples/mailboxlayer-check-success-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-typo-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-disposable-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-error-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-result-example.json
+  - type: Examples
+    url: examples/mailboxlayer-check-result-free-example.json
+  - type: RateLimits
+    url: rate-limits/mailboxlayer-rate-limits.yml
+  - type: OpenAPI
+    name: mailboxlayer API (provider-published, SwaggerHub OpenAPI 3.1.0)
+    url: openapi/_original/mailboxlayer-swaggerhub-openapi.json
+  - type: Overlay
+    url: overlays/mailboxlayer-verification-api-overlay.yaml
+  - type: Conventions
+    url: conventions/mailboxlayer-conventions.yml
+  - type: ErrorCatalog
+    url: errors/mailboxlayer-problem-types.yml
+  - type: DataModel
+    url: data-model/mailboxlayer-data-model.yml
+- name: Mailboxlayer Email Validation API
+  description: >-
+    REST/JSON API for real-time email validation: syntax check, typo suggestions, MX-record lookup, SMTP
+    verification, catch-all/role/disposable/free detection, and quality score. Available via legacy apilayer.net
+    endpoint (access_key query param) and APILayer marketplace endpoint (apikey header).
+  humanURL: https://mailboxlayer.com/documentation
+  baseURL: https://apilayer.net/api/check
+  tags:
+  - Email Validation
+  - Email Verification
+  - Data Quality
+  - Anti-Fraud
+  - Deliverability
+  - Communications
+  - Developer Tools
+  - Security
+  properties:
+  - type: Documentation
+    url: https://mailboxlayer.com/documentation
+  - type: Documentation
+    url: https://docs.apilayer.com/mailboxlayer/docs/api-documentation
+- aid: mailboxlayer:mailboxlayer-bulk-check-api
+  name: Mailboxlayer Bulk Check API
+  description: The Bulk Check API from Mailboxlayer — 1 operation(s) for bulk check.
+  humanURL: https://mailboxlayer.com
+  baseURL: https://apilayer.net/api
+  tags:
+  - Bulk Check
+  properties:
+  - type: OpenAPI
+    url: openapi/mailboxlayer-bulk-check-api-openapi.yml
+- aid: mailboxlayer:mailboxlayer-check-api
+  name: Mailboxlayer Check API
+  description: The Check API from Mailboxlayer — 1 operation(s) for check.
+  humanURL: https://mailboxlayer.com
+  baseURL: https://apilayer.net/api
+  tags:
+  - Check
+  properties:
+  - type: OpenAPI
+    url: openapi/mailboxlayer-check-api-openapi.yml
 common:
   - type: IssueTracker
     url: https://github.com/apilayer/mailboxlayer-API/issues

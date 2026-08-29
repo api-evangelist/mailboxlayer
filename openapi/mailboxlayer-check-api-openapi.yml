@@ -1,0 +1,455 @@
+openapi: 3.2.0
+info:
+  title: Mailboxlayer Check API
+  version: 1.0.0
+  description: 'Mailboxlayer offers a simple REST-based JSON API enabling you to thoroughly check and verify email addresses right at the point of entry into your system.
+
+
+    In addition to checking the syntax, the actual existence of an email address using MX-Records and the Simple Mail Transfer Protocol (SMTP), and detecting whether or not the requested mailbox is configured to catch all incoming mail traffic, the mailboxlayer API is linked to a number of regularly updated databases containing all available email providers, which simplifies the separation of disposable (e.g. "mailinator") and free email addresses (e.g. "gmail", "yahoo") from individual domains.
+
+
+    Combined with typo checks, did-you-mean suggestions and a numeric score reflecting the quality of each email address, these structures will make it simple to automatically filter "real" customers from abusers and increase response and success rates of your email campaigns.'
+servers:
+- url: https://apilayer.net/api
+security:
+- AccessKeyQuery: []
+tags:
+- name: Check
+paths:
+  /check:
+    get:
+      summary: Validate
+      description: Perform an email validation for a single email address.
+      operationId: checkEmail
+      parameters:
+      - $ref: '#/components/parameters/access_key'
+      - $ref: '#/components/parameters/email'
+      - $ref: '#/components/parameters/smtp'
+      - $ref: '#/components/parameters/catch_all'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful validation result (single object). Service-level errors (empty/invalid `email`, plan restrictions) are also returned here with HTTP 200 and a `success:false` ApiError body.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/EmailValidationResponse'
+                - $ref: '#/components/schemas/ApiError'
+              examples:
+                default:
+                  value:
+                    email: support@mailboxlayer.com
+                    did_you_mean: ''
+                    user: support
+                    domain: mailboxlayer.com
+                    format_valid: true
+                    mx_found: true
+                    smtp_check: true
+                    catch_all: false
+                    role: false
+                    disposable: false
+                    free: false
+                    score: 0.92
+                service_error:
+                  value:
+                    success: false
+                    error:
+                      code: 210
+                      type: no_email_address_supplied
+                      info: 'Please specify an email address. [Example: support@mailboxlayer.com]'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimitReached'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/Maintenance'
+      tags:
+      - Check
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            https_access_restricted:
+              summary: https_access_restricted
+              value:
+                success: false
+                error:
+                  code: 105
+                  type: https_access_restricted
+                  info: Access Restricted - Your current Subscription Plan does not support HTTPS Encryption.
+            function_access_restricted:
+              summary: function_access_restricted
+              value:
+                success: false
+                error:
+                  code: 105
+                  type: function_access_restricted
+                  info: Access Restricted - Your current Subscription Plan does not support this API Function.
+            api_access_blocked:
+              summary: api_access_blocked
+              value:
+                success: false
+                error:
+                  code: 104
+                  type: api_access_blocked
+                  info: Your API access has been temporarily disabled. Please upgrade your Subscription Plan or contact support.
+    Maintenance:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            maintenance_mode:
+              summary: maintenance_mode
+              value:
+                success: false
+                error:
+                  code: 503
+                  type: maintenance_mode
+                  info: ''
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            account_on_hold:
+              summary: account_on_hold
+              value:
+                success: false
+                error:
+                  code: 107
+                  type: account_on_hold
+                  info: 'Your account currently has open invoices and API has been automatically disabled. Please settle your open balance or downgrade to the Free Plan to restore API access. [Support: support@apilayer.com]'
+            invalid_access_key:
+              summary: invalid_access_key
+              value:
+                success: false
+                error:
+                  code: 101
+                  type: invalid_access_key
+                  info: 'You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]'
+            missing_access_key:
+              summary: missing_access_key
+              value:
+                success: false
+                error:
+                  code: 101
+                  type: missing_access_key
+                  info: 'You have not supplied an API Access Key. [Required format: access_key=YOUR_ACCESS_KEY]'
+            inactive_user:
+              summary: inactive_user
+              value:
+                success: false
+                error:
+                  code: 102
+                  type: inactive_user
+                  info: Permission denied - User not active.
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            invalid_api_function:
+              summary: invalid_api_function
+              value:
+                success: false
+                error:
+                  code: 103
+                  type: invalid_api_function
+                  info: This API Function does not exist.
+            404_not_found:
+              summary: 404_not_found
+              value:
+                success: false
+                error:
+                  code: 404
+                  type: 404_not_found
+                  info: 404 - The requested resource could not be found. Please try again or contact support.
+    RateLimitReached:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            usage_limit_reached:
+              summary: usage_limit_reached
+              value:
+                success: false
+                error:
+                  code: 104
+                  type: usage_limit_reached
+                  info: Your monthly usage limit has been reached. Please upgrade your Subscription Plan.
+            daily_usage_limit_reached:
+              summary: daily_usage_limit_reached
+              value:
+                success: false
+                error:
+                  code: 104
+                  type: daily_usage_limit_reached
+                  info: Your daily usage limit has been reached. Please try again tomorrow or upgrade your subscription plan.
+            fair_use_limit_reached:
+              summary: fair_use_limit_reached
+              value:
+                success: false
+                error:
+                  code: 104
+                  type: fair_use_limit_reached
+                  info: 'Your fair use limit has been reached. [Please contact support: support@apilayer.com]'
+            rate_limit_reached:
+              summary: rate_limit_reached
+              value:
+                success: false
+                error:
+                  code: 106
+                  type: rate_limit_reached
+                  info: 'You have exceeded the maximum rate limitation allowed on your subscription plan. Please refer to the "Rate Limits" section of the API Documentation for details. '
+    ValidationError:
+      description: Request-validation error — a required query parameter is missing or malformed (for example no `email` supplied). Returned with HTTP 422 and FastAPI's validation body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestValidationError'
+          examples:
+            missing_email:
+              value:
+                detail:
+                - loc:
+                  - query
+                  - email
+                  msg: field required
+                  type: value_error.missing
+    InternalError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            internal_error:
+              summary: internal_error
+              value:
+                success: false
+                error:
+                  code: 0
+                  type: internal_error
+                  info: 'An error has occured. [Technical Support: support@apilayer.com]'
+  parameters:
+    access_key:
+      name: access_key
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Mailboxlayer API Access Key (required for all requests).
+      example: YOUR_ACCESS_KEY
+    catch_all:
+      name: catch_all
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Enable catch-all mailbox detection by setting `catch_all=1`. Disabled by default because check is heavier and may increase response time. If not requested, the `catch_all` response value will typically be `null`. Some plans restrict catch-all detection.
+      example: 0
+    callback:
+      name: callback
+      in: query
+      required: false
+      schema:
+        type: string
+      description: JSONP callback function name; wrapper will be returned if specified.
+      example: myCallback
+    format:
+      name: format
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Set to 1 for human-prettified JSON output (useful for debugging; increases payload size).
+      example: 0
+    email:
+      name: email
+      in: query
+      required: true
+      schema:
+        type: string
+        format: email
+      description: Email address to validate (single validation).
+      example: support@mailboxlayer.com
+    smtp:
+      name: smtp
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Enable (1) or disable (0) the SMTP check. SMTP verification is active by default. Turning it off may speed up responses but disables the `smtp_check` verdict.
+      example: 1
+  schemas:
+    ApiError:
+      type: object
+      description: Standard error payload returned by Mailboxlayer when a request fails.
+      properties:
+        success:
+          type: boolean
+          description: Always false for error responses.
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              description: Numeric error code as defined in Mailboxlayer docs.
+              example: 210
+            type:
+              type: string
+              description: Short machine-readable error type.
+              example: no_email_address_supplied
+            info:
+              type: string
+              description: Human-readable info / suggestion for correcting the request.
+              example: 'Please specify an email address. [Example: support@mailboxlayer.com]'
+          required:
+          - code
+          - type
+          - info
+      required:
+      - success
+      - error
+    RequestValidationError:
+      type: object
+      description: FastAPI request-validation error body. Returned with HTTP 422 when a required query parameter is missing or malformed. This is a different shape from the ApiError envelope used for service-level errors (which are returned with HTTP 200).
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: array
+                items:
+                  type: string
+                example:
+                - query
+                - email
+              msg:
+                type: string
+                example: field required
+              type:
+                type: string
+                example: value_error.missing
+    EmailValidationResponse:
+      type: object
+      description: A single email validation result object. Fields may be `true`/`false` or `null` depending on whether a check was performed or supported by your plan.
+      properties:
+        email:
+          type: string
+          format: email
+          description: Exact email address as checked.
+          example: support@mailboxlayer.com
+        did_you_mean:
+          type:
+          - string
+          - 'null'
+          description: Suggested correction if a domain-typo is detected; empty string if none.
+          example: ''
+        user:
+          type:
+          - string
+          - 'null'
+          description: Local part (before the @) of the email address.
+          example: support
+        domain:
+          type:
+          - string
+          - 'null'
+          description: Domain part (after the @) of the email address.
+          example: mailboxlayer.com
+        format_valid:
+          type:
+          - boolean
+          - 'null'
+          description: Returns true if the email address syntax is valid per RFC rules.
+          example: true
+        mx_found:
+          type:
+          - boolean
+          - 'null'
+          description: True if MX records for the domain were found.
+          example: true
+        smtp_check:
+          type:
+          - boolean
+          - 'null'
+          description: Result of SMTP verification (true = mailbox appears to exist).
+          example: true
+        catch_all:
+          type:
+          - boolean
+          - 'null'
+          description: True if the domain accepts all emails (catch-all). If catch-all detection was not requested or not permitted on plan, this value may be null.
+          example: false
+        role:
+          type:
+          - boolean
+          - 'null'
+          description: True if the email address is a role account (e.g., admin, support).
+          example: false
+        disposable:
+          type:
+          - boolean
+          - 'null'
+          description: True if the address belongs to a known disposable / temporary provider.
+          example: false
+        free:
+          type:
+          - boolean
+          - 'null'
+          description: True if the email uses a known free provider (e.g., gmail.com).
+          example: true
+        score:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Aggregate quality/deliverability score between 0 (worst) and 1 (best).
+          example: 0.92
+      required:
+      - email
+  securitySchemes:
+    AccessKeyQuery:
+      type: apiKey
+      in: query
+      name: access_key
+      description: Your Mailboxlayer API access key; pass as `access_key` query parameter.
+externalDocs:
+  description: Official Mailboxlayer documentation (reference)
+  url: https://mailboxlayer.com/documentation
