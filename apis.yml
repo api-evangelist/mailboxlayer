@@ -27,9 +27,12 @@ accessModel:
   label: Freemium · Self-serve signup
   confidence: high
   source:
-    - plans
-    - authentication
-  generated: '2026-07-22'
+  - plans
+  - authentication
+  - rate-limits
+  - security
+  - sandbox
+  generated: '2026-09-03'
   method: derived
 image: https://mailboxlayer.com/site_images/mailboxlayer_logo_white.svg
 specificationVersion: '0.23'
