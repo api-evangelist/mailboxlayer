@@ -84,65 +84,22 @@ paths:
       tags:
       - Bulk Check
 components:
-  parameters:
-    format:
-      name: format
-      in: query
-      required: false
-      schema:
-        type: integer
-        enum:
-        - 0
-        - 1
-      description: Set to 1 for human-prettified JSON output (useful for debugging; increases payload size).
-      example: 0
-    smtp:
-      name: smtp
-      in: query
-      required: false
-      schema:
-        type: integer
-        enum:
-        - 0
-        - 1
-      description: Enable (1) or disable (0) the SMTP check. SMTP verification is active by default. Turning it off may speed up responses but disables the `smtp_check` verdict.
-      example: 1
-    access_key:
-      name: access_key
-      in: query
-      required: true
-      schema:
-        type: string
-      description: Mailboxlayer API Access Key (required for all requests).
-      example: YOUR_ACCESS_KEY
-    emails:
-      name: emails
-      in: query
-      required: true
-      schema:
-        type: string
-      description: Comma-separated list of email addresses for bulk validation (e.g. `a@example.com,b@x.com`). Bulk limits depend on plan (Pro+ up to 25, Enterprise+ up to 100).
-      example: user1@example.com,user2@example.com
-    callback:
-      name: callback
-      in: query
-      required: false
-      schema:
-        type: string
-      description: JSONP callback function name; wrapper will be returned if specified.
-      example: myCallback
-    catch_all:
-      name: catch_all
-      in: query
-      required: false
-      schema:
-        type: integer
-        enum:
-        - 0
-        - 1
-      description: Enable catch-all mailbox detection by setting `catch_all=1`. Disabled by default because check is heavier and may increase response time. If not requested, the `catch_all` response value will typically be `null`. Some plans restrict catch-all detection.
-      example: 0
   responses:
+    BulkValidationError:
+      description: Request-validation error — a required query parameter is missing or malformed (for example no `emails` supplied). Returned with HTTP 422 and FastAPI's validation body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestValidationError'
+          examples:
+            missing_emails:
+              value:
+                detail:
+                - loc:
+                  - query
+                  - emails
+                  msg: field required
+                  type: value_error.missing
     RateLimitReached:
       description: Too Many Requests
       content:
@@ -182,44 +139,6 @@ components:
                   code: 106
                   type: rate_limit_reached
                   info: 'You have exceeded the maximum rate limitation allowed on your subscription plan. Please refer to the "Rate Limits" section of the API Documentation for details. '
-    InternalError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            internal_error:
-              summary: internal_error
-              value:
-                success: false
-                error:
-                  code: 0
-                  type: internal_error
-                  info: 'An error has occured. [Technical Support: support@apilayer.com]'
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            invalid_api_function:
-              summary: invalid_api_function
-              value:
-                success: false
-                error:
-                  code: 103
-                  type: invalid_api_function
-                  info: This API Function does not exist.
-            404_not_found:
-              summary: 404_not_found
-              value:
-                success: false
-                error:
-                  code: 404
-                  type: 404_not_found
-                  info: 404 - The requested resource could not be found. Please try again or contact support.
     Unauthorized:
       description: Unauthorized
       content:
@@ -259,36 +178,21 @@ components:
                   code: 102
                   type: inactive_user
                   info: Permission denied - User not active.
-    BulkValidationError:
-      description: Request-validation error — a required query parameter is missing or malformed (for example no `emails` supplied). Returned with HTTP 422 and FastAPI's validation body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RequestValidationError'
-          examples:
-            missing_emails:
-              value:
-                detail:
-                - loc:
-                  - query
-                  - emails
-                  msg: field required
-                  type: value_error.missing
-    Maintenance:
-      description: Service Unavailable
+    InternalError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
           examples:
-            maintenance_mode:
-              summary: maintenance_mode
+            internal_error:
+              summary: internal_error
               value:
                 success: false
                 error:
-                  code: 503
-                  type: maintenance_mode
-                  info: ''
+                  code: 0
+                  type: internal_error
+                  info: 'An error has occured. [Technical Support: support@apilayer.com]'
     Forbidden:
       description: Forbidden
       content:
@@ -320,6 +224,44 @@ components:
                   code: 104
                   type: api_access_blocked
                   info: Your API access has been temporarily disabled. Please upgrade your Subscription Plan or contact support.
+    Maintenance:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            maintenance_mode:
+              summary: maintenance_mode
+              value:
+                success: false
+                error:
+                  code: 503
+                  type: maintenance_mode
+                  info: ''
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            invalid_api_function:
+              summary: invalid_api_function
+              value:
+                success: false
+                error:
+                  code: 103
+                  type: invalid_api_function
+                  info: This API Function does not exist.
+            404_not_found:
+              summary: 404_not_found
+              value:
+                success: false
+                error:
+                  code: 404
+                  type: 404_not_found
+                  info: 404 - The requested resource could not be found. Please try again or contact support.
   schemas:
     ApiError:
       type: object
@@ -351,6 +293,28 @@ components:
       required:
       - success
       - error
+    RequestValidationError:
+      type: object
+      description: FastAPI request-validation error body. Returned with HTTP 422 when a required query parameter is missing or malformed. This is a different shape from the ApiError envelope used for service-level errors (which are returned with HTTP 200).
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: array
+                items:
+                  type: string
+                example:
+                - query
+                - email
+              msg:
+                type: string
+                example: field required
+              type:
+                type: string
+                example: value_error.missing
     EmailValidationResponse:
       type: object
       description: A single email validation result object. Fields may be `true`/`false` or `null` depending on whether a check was performed or supported by your plan.
@@ -429,28 +393,64 @@ components:
           example: 0.92
       required:
       - email
-    RequestValidationError:
-      type: object
-      description: FastAPI request-validation error body. Returned with HTTP 422 when a required query parameter is missing or malformed. This is a different shape from the ApiError envelope used for service-level errors (which are returned with HTTP 200).
-      properties:
-        detail:
-          type: array
-          items:
-            type: object
-            properties:
-              loc:
-                type: array
-                items:
-                  type: string
-                example:
-                - query
-                - email
-              msg:
-                type: string
-                example: field required
-              type:
-                type: string
-                example: value_error.missing
+  parameters:
+    smtp:
+      name: smtp
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Enable (1) or disable (0) the SMTP check. SMTP verification is active by default. Turning it off may speed up responses but disables the `smtp_check` verdict.
+      example: 1
+    catch_all:
+      name: catch_all
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Enable catch-all mailbox detection by setting `catch_all=1`. Disabled by default because check is heavier and may increase response time. If not requested, the `catch_all` response value will typically be `null`. Some plans restrict catch-all detection.
+      example: 0
+    access_key:
+      name: access_key
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Mailboxlayer API Access Key (required for all requests).
+      example: YOUR_ACCESS_KEY
+    callback:
+      name: callback
+      in: query
+      required: false
+      schema:
+        type: string
+      description: JSONP callback function name; wrapper will be returned if specified.
+      example: myCallback
+    format:
+      name: format
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Set to 1 for human-prettified JSON output (useful for debugging; increases payload size).
+      example: 0
+    emails:
+      name: emails
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Comma-separated list of email addresses for bulk validation (e.g. `a@example.com,b@x.com`). Bulk limits depend on plan (Pro+ up to 25, Enterprise+ up to 100).
+      example: user1@example.com,user2@example.com
   securitySchemes:
     AccessKeyQuery:
       type: apiKey

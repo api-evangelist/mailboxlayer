@@ -6,17 +6,20 @@ description: >-
   deliverability quality score.
 url: https://mailboxlayer.com
 deliveryModel:
-  model: unknown
+  model: saas
+  license_evidence:
+    not_product:
+    - apilayer/mailboxlayer-api
   open_source: unknown
   commercial: true
   callable_host: true
-  label: Delivery model not determined — needs a product licence on record
+  label: Hosted service · you call their endpoint
   confidence: low
   source:
   - openapi
   - pricing
-  - repository-unlicensed
-  generated: '2026-08-28'
+  - repository-not-product
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: freemium
@@ -46,7 +49,6 @@ x-type: company
 tags:
   - Email
   - Email Verification
-  - Email Validation
   - SMTP
   - MX Records
   - Catch-All Detection
@@ -57,7 +59,7 @@ tags:
   - APILayer
   - Public APIs
   - Data Quality
-  - Anti-Fraud
+  - Fraud Prevention
   - Deliverability
   - Communications
   - Developer Tools
@@ -90,6 +92,14 @@ apis:
   humanURL: https://mailboxlayer.com/documentation
   baseURL: https://apilayer.net/api/check
   tags:
+  - Email Verification
+  - Data Quality
+  - Fraud Prevention
+  - Deliverability
+  - Communications
+  - Developer Tools
+  - Security
+  tags_raw:
   - Email Validation
   - Email Verification
   - Data Quality
