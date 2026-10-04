@@ -46,6 +46,9 @@ x-category: Email
 x-tier: 3
 x-tier-reason: bulk-registered-from-public-apis
 x-type: company
+x-docs-platform: stoplight
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
 tags:
   - Email
   - Email Verification
