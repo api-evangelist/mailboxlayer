@@ -193,3 +193,40 @@ signup:
   note: >-
     Self-serve. One APILayer account and one access key cover every APILayer product, so a
     mailboxlayer subscription is billed on the same account as any sibling API.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Basic
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Professional Plus
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise Plus
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Custom / Unlimited
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
