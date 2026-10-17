@@ -70,7 +70,96 @@ paths:
       tags:
       - Check
 components:
+  parameters:
+    format:
+      name: format
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Set to 1 for human-prettified JSON output (useful for debugging; increases payload size).
+      example: 0
+    email:
+      name: email
+      in: query
+      required: true
+      schema:
+        type: string
+        format: email
+      description: Email address to validate (single validation).
+      example: support@mailboxlayer.com
+    smtp:
+      name: smtp
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Enable (1) or disable (0) the SMTP check. SMTP verification is active by default. Turning it off may speed up responses but disables the `smtp_check` verdict.
+      example: 1
+    access_key:
+      name: access_key
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Mailboxlayer API Access Key (required for all requests).
+      example: YOUR_ACCESS_KEY
+    callback:
+      name: callback
+      in: query
+      required: false
+      schema:
+        type: string
+      description: JSONP callback function name; wrapper will be returned if specified.
+      example: myCallback
+    catch_all:
+      name: catch_all
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: Enable catch-all mailbox detection by setting `catch_all=1`. Disabled by default because check is heavier and may increase response time. If not requested, the `catch_all` response value will typically be `null`. Some plans restrict catch-all detection.
+      example: 0
   schemas:
+    ApiError:
+      type: object
+      description: Standard error payload returned by Mailboxlayer when a request fails.
+      properties:
+        success:
+          type: boolean
+          description: Always false for error responses.
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              description: Numeric error code as defined in Mailboxlayer docs.
+              example: 210
+            type:
+              type: string
+              description: Short machine-readable error type.
+              example: no_email_address_supplied
+            info:
+              type: string
+              description: Human-readable info / suggestion for correcting the request.
+              example: 'Please specify an email address. [Example: support@mailboxlayer.com]'
+          required:
+          - code
+          - type
+          - info
+      required:
+      - success
+      - error
     EmailValidationResponse:
       type: object
       description: A single email validation result object. Fields may be `true`/`false` or `null` depending on whether a check was performed or supported by your plan.
@@ -149,36 +238,6 @@ components:
           example: 0.92
       required:
       - email
-    ApiError:
-      type: object
-      description: Standard error payload returned by Mailboxlayer when a request fails.
-      properties:
-        success:
-          type: boolean
-          description: Always false for error responses.
-          example: false
-        error:
-          type: object
-          properties:
-            code:
-              type: integer
-              description: Numeric error code as defined in Mailboxlayer docs.
-              example: 210
-            type:
-              type: string
-              description: Short machine-readable error type.
-              example: no_email_address_supplied
-            info:
-              type: string
-              description: Human-readable info / suggestion for correcting the request.
-              example: 'Please specify an email address. [Example: support@mailboxlayer.com]'
-          required:
-          - code
-          - type
-          - info
-      required:
-      - success
-      - error
     RequestValidationError:
       type: object
       description: FastAPI request-validation error body. Returned with HTTP 422 when a required query parameter is missing or malformed. This is a different shape from the ApiError envelope used for service-level errors (which are returned with HTTP 200).
@@ -217,6 +276,44 @@ components:
                   code: 503
                   type: maintenance_mode
                   info: ''
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            invalid_api_function:
+              summary: invalid_api_function
+              value:
+                success: false
+                error:
+                  code: 103
+                  type: invalid_api_function
+                  info: This API Function does not exist.
+            404_not_found:
+              summary: 404_not_found
+              value:
+                success: false
+                error:
+                  code: 404
+                  type: 404_not_found
+                  info: 404 - The requested resource could not be found. Please try again or contact support.
+    ValidationError:
+      description: Request-validation error — a required query parameter is missing or malformed (for example no `email` supplied). Returned with HTTP 422 and FastAPI's validation body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestValidationError'
+          examples:
+            missing_email:
+              value:
+                detail:
+                - loc:
+                  - query
+                  - email
+                  msg: field required
+                  type: value_error.missing
     Forbidden:
       description: Forbidden
       content:
@@ -287,44 +384,6 @@ components:
                   code: 102
                   type: inactive_user
                   info: Permission denied - User not active.
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            invalid_api_function:
-              summary: invalid_api_function
-              value:
-                success: false
-                error:
-                  code: 103
-                  type: invalid_api_function
-                  info: This API Function does not exist.
-            404_not_found:
-              summary: 404_not_found
-              value:
-                success: false
-                error:
-                  code: 404
-                  type: 404_not_found
-                  info: 404 - The requested resource could not be found. Please try again or contact support.
-    InternalError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-          examples:
-            internal_error:
-              summary: internal_error
-              value:
-                success: false
-                error:
-                  code: 0
-                  type: internal_error
-                  info: 'An error has occured. [Technical Support: support@apilayer.com]'
     RateLimitReached:
       description: Too Many Requests
       content:
@@ -364,80 +423,21 @@ components:
                   code: 106
                   type: rate_limit_reached
                   info: 'You have exceeded the maximum rate limitation allowed on your subscription plan. Please refer to the "Rate Limits" section of the API Documentation for details. '
-    ValidationError:
-      description: Request-validation error — a required query parameter is missing or malformed (for example no `email` supplied). Returned with HTTP 422 and FastAPI's validation body.
+    InternalError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/RequestValidationError'
+            $ref: '#/components/schemas/ApiError'
           examples:
-            missing_email:
+            internal_error:
+              summary: internal_error
               value:
-                detail:
-                - loc:
-                  - query
-                  - email
-                  msg: field required
-                  type: value_error.missing
-  parameters:
-    smtp:
-      name: smtp
-      in: query
-      required: false
-      schema:
-        type: integer
-        enum:
-        - 0
-        - 1
-      description: Enable (1) or disable (0) the SMTP check. SMTP verification is active by default. Turning it off may speed up responses but disables the `smtp_check` verdict.
-      example: 1
-    email:
-      name: email
-      in: query
-      required: true
-      schema:
-        type: string
-        format: email
-      description: Email address to validate (single validation).
-      example: support@mailboxlayer.com
-    catch_all:
-      name: catch_all
-      in: query
-      required: false
-      schema:
-        type: integer
-        enum:
-        - 0
-        - 1
-      description: Enable catch-all mailbox detection by setting `catch_all=1`. Disabled by default because check is heavier and may increase response time. If not requested, the `catch_all` response value will typically be `null`. Some plans restrict catch-all detection.
-      example: 0
-    callback:
-      name: callback
-      in: query
-      required: false
-      schema:
-        type: string
-      description: JSONP callback function name; wrapper will be returned if specified.
-      example: myCallback
-    format:
-      name: format
-      in: query
-      required: false
-      schema:
-        type: integer
-        enum:
-        - 0
-        - 1
-      description: Set to 1 for human-prettified JSON output (useful for debugging; increases payload size).
-      example: 0
-    access_key:
-      name: access_key
-      in: query
-      required: true
-      schema:
-        type: string
-      description: Mailboxlayer API Access Key (required for all requests).
-      example: YOUR_ACCESS_KEY
+                success: false
+                error:
+                  code: 0
+                  type: internal_error
+                  info: 'An error has occured. [Technical Support: support@apilayer.com]'
   securitySchemes:
     AccessKeyQuery:
       type: apiKey
