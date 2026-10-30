@@ -1,4 +1,4 @@
-# mailboxlayer (mailboxlayer)
+# Mailboxlayer
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,97 +64,181 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-mailboxlayer is an apilayer-owned REST JSON API for email address verification. It performs syntax and typo checks, MX-record lookup, real-time SMTP verification, catch-all detection, role-address detection, free and disposable provider detection, and returns a numeric deliverability quality score. Useful for signup-form validation, list hygiene, lead enrichment, and fraud prevention.
+Real-time email validation and verification REST/JSON API operated by APILayer. Provides syntax checks, typo suggestions, MX-record lookup, SMTP verification, catch-all/role/disposable/free-provider detection, and a deliverability quality score.
 
-**APIs.json:** [https://mailboxlayer.com](https://mailboxlayer.com)
+**Areas:** Email · Email Verification · SMTP · MX Records · Catch-All Detection · Disposable Email · Free Email Provider · Role Address · Quality Score · APILayer · Public APIs · Data Quality
 
-## Tags
+## Mailboxlayer on APIs.io
 
-- Email
-- Email Verification
-- Email Validation
-- SMTP
-- MX Records
-- Catch-All Detection
-- Disposable Email
-- Free Email Provider
-- Role Address
-- Quality Score
-- apilayer
-- Public APIs
+Everything profiled for Mailboxlayer is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/mailboxlayer/](https://apis.io/providers/mailboxlayer/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (3)
 
-- **Created:** 2026-05-28
-- **Modified:** 2026-05-30
+- [Mailboxlayer Email Validation API](https://apis.io/apis/mailboxlayer/mailboxlayer-email-validation-api/) — REST/JSON API for real-time email validation: syntax check, typo suggestions, MX-record lookup, SMTP verification, catch-all/role/disposable/free detection,…
+- [Mailboxlayer Bulk Check API](https://apis.io/apis/mailboxlayer/mailboxlayer-bulk-check-api/) — The Bulk Check API from Mailboxlayer — 1 operation(s) for bulk check.
+- [Mailboxlayer Check API](https://apis.io/apis/mailboxlayer/mailboxlayer-check-api/) — The Check API from Mailboxlayer — 1 operation(s) for check.
 
-## APIs
+### Published properties
 
-### mailboxlayer Verification API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-REST JSON API for verifying a single email address. Performs syntax validation, MX-record lookup, real-time SMTP check, catch-all detection, role-address detection, free / disposable provider detection, did-you-mean suggestion, and a 0.0 - 1.0 deliverability quality score.
+#### Agentic access (1)
 
-- **Human URL:** [https://mailboxlayer.com](https://mailboxlayer.com)
-- **Base URL:** `https://apilayer.net/api`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Mailboxlayer Agentic Access](https://apis.io/agentic-access/mailboxlayer/mailboxlayer-agentic-access/)
 
-- Email Verification
-- SMTP
-- MX Records
-- Quality Score
+#### JSON Schema (2)
 
-#### Properties
+The data models the API reads and writes.
 
-- [Documentation](https://docs.apilayer.com/mailboxlayer/docs/api-documentation)
-- [API Reference](https://docs.apilayer.com/mailboxlayer/docs/api-documentation)
-- [Quickstart](https://mailboxlayer.com/quickstart)
-- [Authentication](https://docs.apilayer.com/mailboxlayer/docs/api-documentation)
-- [OpenAPI](openapi/mailboxlayer-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/mailboxlayer.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/mailboxlayer.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [JSON Schema](json-schema/mailboxlayer-check-result-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/mailboxlayer-error-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Structure](json-structure/mailboxlayer-check-result-structure.json)
-- [J S O N- L D](json-ld/mailboxlayer-context.jsonld)
-- [Example](examples/mailboxlayer-check-success-example.json)
-- [Example](examples/mailboxlayer-check-typo-example.json)
-- [Example](examples/mailboxlayer-check-disposable-example.json)
-- [Example](examples/mailboxlayer-check-error-example.json)
-- [Example](examples/mailboxlayer-check-result-example.json)
-- [Example](examples/mailboxlayer-check-result-free-example.json)
-- [Rate Limits](rate-limits/mailboxlayer-rate-limits.yml)
+- [mailboxlayer Email Check Result](https://apis.io/schemas/mailboxlayer/mailboxlayer-check-result/)
+- [mailboxlayer Error Response](https://apis.io/schemas/mailboxlayer/mailboxlayer-error/)
 
-## Common Properties
+#### JSON Structure (1)
+
+Data models expressed in JSON Structure.
+
+- [Mailboxlayer Check Result Structure](https://apis.io/json-structure/mailboxlayer/mailboxlayer-check-result-structure/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Mailboxlayer Context](https://apis.io/jsonld/mailboxlayer/mailboxlayer-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [mailboxlayer Vocabulary](https://apis.io/vocabularies/mailboxlayer/mailboxlayer-vocabulary/)
+
+#### Examples (6)
+
+Example requests and responses.
+
+- [Mailboxlayer Check Disposable Example](https://apis.io/examples/mailboxlayer/mailboxlayer-check-disposable-example/)
+- [Mailboxlayer Check Error Example](https://apis.io/examples/mailboxlayer/mailboxlayer-check-error-example/)
+- [Mailboxlayer Check Result Example](https://apis.io/examples/mailboxlayer/mailboxlayer-check-result-example/)
+- [Mailboxlayer Check Result Free Example](https://apis.io/examples/mailboxlayer/mailboxlayer-check-result-free-example/)
+- [Mailboxlayer Check Success Example](https://apis.io/examples/mailboxlayer/mailboxlayer-check-success-example/)
+- [Mailboxlayer Check Typo Example](https://apis.io/examples/mailboxlayer/mailboxlayer-check-typo-example/)
+
+#### Collections (3)
+
+Postman and Open Collection request collections.
+
+- [mailboxlayer API](https://apis.io/collections/mailboxlayer/open-mailboxlayer/)
+- [mailboxlayer Verification API](https://apis.io/collections/mailboxlayer/open-mailboxlayer-verification-api/)
+- [mailboxlayer Verification API](https://apis.io/collections/mailboxlayer/postman-mailboxlayer-verification-api/)
+
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Mailboxlayer Bulk Check Api Phrasing Overlay](https://apis.io/overlays/mailboxlayer/mailboxlayer-bulk-check-api-phrasing-overlay/)
+- [Mailboxlayer Check Api Phrasing Overlay](https://apis.io/overlays/mailboxlayer/mailboxlayer-check-api-phrasing-overlay/)
+- [Mailboxlayer Verification Api Overlay](https://apis.io/overlays/mailboxlayer/mailboxlayer-verification-api-overlay/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [Mailboxlayer — jsonschema rules](https://apis.io/rules/mailboxlayer/mailboxlayer-jsonschema-spectral-rules/)
+- [Mailboxlayer API Rules](https://apis.io/rules/mailboxlayer/mailboxlayer-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Mailboxlayer Authentication](https://apis.io/security/mailboxlayer/mailboxlayer-authentication/)
+- [Mailboxlayer Domain Security](https://apis.io/security/mailboxlayer/mailboxlayer-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Mailboxlayer Plans Pricing](https://apis.io/plans/mailboxlayer/mailboxlayer-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Mailboxlayer Rate Limits](https://apis.io/rate-limits/mailboxlayer/mailboxlayer-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Mailboxlayer Finops](https://apis.io/finops/mailboxlayer/mailboxlayer-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://mailboxlayer.com)
-- [Portal](https://mailboxlayer.com/dashboard)
-- [Sign Up](https://mailboxlayer.com/product)
+- [Documentation](https://docs.apilayer.com/mailboxlayer/docs/api-documentation)
+- [Getting started](https://mailboxlayer.com/quickstart)
+- [API reference](https://docs.apilayer.com/mailboxlayer/docs/mailboxlayer-api-v-1-0-0)
 - [Pricing](https://mailboxlayer.com/product)
-- [Getting Started](https://mailboxlayer.com/quickstart)
-- [Terms of Service](https://mailboxlayer.com/terms)
-- [Privacy Policy](https://mailboxlayer.com/privacy)
-- [Support](https://mailboxlayer.com/support)
-- [GitHub Organization](https://github.com/apilayer)
-- [GitHub Repository](https://github.com/apilayer/mailboxlayer-API)
-- [SDK](https://github.com/ash-jc-allen/laravel-mailboxlayer)
-- [SDK](https://github.com/actfong/mailboxlayer)
-- [SDK](https://github.com/damienmarchandfr/mailboxlayer-node-client)
-- [SDK](https://github.com/ylly/mailboxlayerbundle)
-- [Integrations](https://github.com/PostHog/mailboxlayer-plugin)
-- [Integrations](https://github.com/fortinet-fortisoar/connector-mailboxlayer)
-- [Spectral Rules](rules/mailboxlayer-rules.yml)
-- [Vocabulary](vocabulary/mailboxlayer-vocabulary.yml)
-- [Public APIs Listing](https://github.com/public-apis/public-apis)
-- [Plans](plans/mailboxlayer-plans-pricing.yml)
-- [Rate Limits](rate-limits/mailboxlayer-rate-limits.yml)
-- [Fin Ops](finops/mailboxlayer-finops.yml)
-- [Features](undefined)
-- [Use Cases](undefined)
-- [Integrations](undefined)
-- [Solutions](undefined)
+- [Support](https://apilayer.com/support/)
+- [Blog](https://blog.apilayer.com/)
+- [Terms of service](https://mailboxlayer.com/terms)
+- [Privacy policy](https://mailboxlayer.com/privacy)
+- [GitHub](https://github.com/apilayer)
+- [Status](https://mailboxlayer.com/api-status)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 67.4** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 80.4 |
+| Contract quality | 56.9 |
+| Contract governance | 45.5 |
+| Operational transparency | 50.0 |
+| Developer ergonomics | 82.7 |
+| Access clarity | 76.3 |
+
+**Agent readiness 33.1** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/mailboxlayer/](https://apis.io/providers/mailboxlayer/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Mailboxlayer: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/mailboxlayer/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
